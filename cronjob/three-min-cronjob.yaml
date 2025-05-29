@@ -1,0 +1,19 @@
+apiVersion: batch/v1
+kind: CronJob
+metadata:
+  name: my-cronjob
+  namespace: default
+spec:
+  schedule: "*/3 * * * *" # 每3分鐘執行一次
+  jobTemplate:
+    spec:
+      template:
+        spec:
+          restartPolicy: Never
+          containers:
+            - name: my-job
+              image: busybox
+              args:
+                - /bin/sh
+                - -c
+                - "echo 'Job started at $(date)'; sleep 10; echo 'Job completed.'"
