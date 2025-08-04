@@ -10,8 +10,9 @@ configMapGenerator:
       - ".env"
   - name: vehicle-charge-checkout-target-cm
     literals:
+      - TARGET_DATE=2025-08-04 09:00:00
       - TARGET_DATE_RANGE=-29h
-      - RANGE_OFFSET=5h
+      # - RANGE_OFFSET=5h
 
 secretGenerator:
   - name: vehicle-charge-checkout-secret
