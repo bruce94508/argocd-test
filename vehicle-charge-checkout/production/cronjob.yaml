@@ -3,7 +3,7 @@ kind: CronJob
 metadata:
   name: vehicle-charge-checkout
 spec:
-  schedule: "26 11 * * *" # default: UTC, set timeZone for local time
+  schedule: "27 13 * * *" # default: UTC, set timeZone for local time
   startingDeadlineSeconds: 72000 # 20 hours
   jobTemplate:
     spec:
