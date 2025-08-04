@@ -1,0 +1,21 @@
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+resources:
+  - "./cronjob.yaml"
+
+configMapGenerator:
+  - name: vehicle-charge-checkout-cm
+    envs:
+      - ".env.example"
+
+secretGenerator:
+  - name: vehicle-charge-checkout-secret
+    envs:
+      - "secret.env.example"
+
+generatorOptions:
+  disableNameSuffixHash: true
+
+commonLabels:
+  app.maxwin/name: vehicle-charge-checkout
+  app.maxwin/component: backend

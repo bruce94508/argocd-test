@@ -1,0 +1,29 @@
+apiVersion: batch/v1
+kind: CronJob
+metadata:
+  name: vehicle-charge-checkout
+spec:
+  timeZone: "Asia/Taipei"
+  schedule: "0 4 * * *" # default: UTC, set timeZone for local time
+  concurrencyPolicy: Replace
+  startingDeadlineSeconds: 300 # 5 mins
+  jobTemplate:
+    spec:
+      template:
+        spec:
+          containers:
+            - name: vehicle-charge-checkout
+              image: cicd-so-happy.maxwin.com.tw:5000/vehicle-charge-checkout:1.2.0
+              imagePullPolicy: IfNotPresent
+              envFrom:
+                - secretRef:
+                    name: vehicle-charge-checkout-secret
+                - configMapRef:
+                    name: vehicle-charge-checkout-cm
+                - configMapRef:
+                    name: vehicle-charge-checkout-target-cm
+              resources:
+                limits:
+                  cpu: 128m
+                  memory: 256Mi
+          restartPolicy: Never

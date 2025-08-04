@@ -1,0 +1,24 @@
+apiVersion: batch/v1
+kind: CronJob
+metadata:
+  name: vehicle-charge-checkout
+spec:
+  schedule: "13 10 * * *" # default: UTC, set timeZone for local time
+  startingDeadlineSeconds: 72000 # 20 hours
+  jobTemplate:
+    spec:
+      template:
+        spec:
+          containers:
+            - name: vehicle-charge-checkout
+              envFrom:
+                - secretRef:
+                    name: vehicle-charge-checkout-secret
+                - configMapRef:
+                    name: vehicle-charge-checkout-cm
+                - configMapRef:
+                    name: vehicle-charge-checkout-target-cm
+              resources:
+                limits:
+                  cpu: 256m
+                  memory: 512Mi
