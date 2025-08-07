@@ -1,0 +1,9 @@
+auth:
+  adminUser: admin
+  adminPassword: admin
+
+service:
+  type: ClusterIP
+
+postgresql:
+  enabled: true
