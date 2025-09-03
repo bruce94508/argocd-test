@@ -5,6 +5,7 @@ resources:
   - './cronjob-11-2.yaml'
   - './cronjob-12-1.yaml'
   - './cronjob-9-1.yaml'
+  - './cronjob-14-1.yaml'
 
 configMapGenerator:
   - name: charger-edcp-sender-seeds
@@ -29,6 +30,10 @@ configMapGenerator:
     literals:
       - TARGET_DATE_RANGE=-32h
       - TARGET_STATION_CODES=9-1
+  - name: charger-edcp-sender-target-cm-14-1
+    literals:
+      - TARGET_DATE_RANGE=-32h
+      - TARGET_STATION_CODES=14-1
 
 
 secretGenerator:
