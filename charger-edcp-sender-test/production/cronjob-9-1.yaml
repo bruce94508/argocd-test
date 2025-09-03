@@ -4,7 +4,7 @@ metadata:
   name: charger-edcp-sender-9-1
 spec:
   timeZone: 'Asia/Taipei'
-  schedule: '*/3 * * * *'
+  schedule: '*/10 * * * *'
   startingDeadlineSeconds: 72000 # 20 mins
   concurrencyPolicy: Replace
   jobTemplate:
