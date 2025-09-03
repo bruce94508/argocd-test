@@ -11,8 +11,8 @@ spec:
     spec:
       template:
         spec:
-          hostNetwork: true
-          dnsPolicy: ClusterFirstWithHostNet
+          # hostNetwork: true
+          # dnsPolicy: ClusterFirstWithHostNet
           containers:
             - name: charger-edcp-sender
               image: cicd-so-happy.maxwin.com.tw:5000/charger-edcp-sender:1.6.0
