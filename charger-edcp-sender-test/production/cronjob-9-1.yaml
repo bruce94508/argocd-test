@@ -1,0 +1,39 @@
+apiVersion: batch/v1
+kind: CronJob
+metadata:
+  name: charger-edcp-sender-9-1
+spec:
+  timeZone: 'Asia/Taipei'
+  schedule: '*/3 * * * *'
+  startingDeadlineSeconds: 72000 # 20 mins
+  concurrencyPolicy: Replace
+  jobTemplate:
+    spec:
+      template:
+        spec:
+          containers:
+            - name: charger-edcp-sender
+              image: cicd-so-happy.maxwin.com.tw:5000/charger-edcp-sender:1.6.0
+              imagePullPolicy: IfNotPresent
+              envFrom:
+                - secretRef:
+                    name: charger-edcp-sender-secret
+                - configMapRef:
+                    name: charger-edcp-sender-cm
+                - configMapRef:
+                    name: charger-edcp-sender-target-cm-9-1
+              resources:
+                requests:
+                  cpu: 256m
+                  memory: 512Mi
+                limits:
+                  cpu: 256m
+                  memory: 512Mi
+              volumeMounts:
+              - name: seeds
+                mountPath: /var/maxwin/charger-edcp-sender/seeds
+          volumes:
+          - name: seeds
+            configMap:
+              name: charger-edcp-sender-seeds
+          restartPolicy: Never

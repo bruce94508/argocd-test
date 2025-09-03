@@ -1,0 +1,80 @@
+[
+  {
+    "condition": { "chargerStation": "左營站1", "chargerId": 2 },
+    "action": {
+      "chargerId": { "2": 12 },
+      "chargerSn": { "1": 121, "2": 122 }
+    }
+  },
+  {
+    "condition": { "chargerStation": "左營站1", "chargerId": 3 },
+    "action": {
+      "chargerId": { "3": 14 },
+      "chargerSn": { "1": 141, "2": 142 }
+    }
+  },
+  {
+    "condition": {
+      "operatorCode": 10160,
+      "chargerStation": "佳里站",
+      "chargerId": 1
+    },
+    "action": {
+      "chargerId": { "1": 5 },
+      "chargerSn": { "1": 1, "2": 2 }
+    }
+  },
+  {
+    "condition": {
+      "operatorCode": 10160,
+      "chargerStation": "佳里站",
+      "chargerId": 2
+    },
+    "action": {
+      "chargerId": { "2": 6 },
+      "chargerSn": { "1": 1, "2": 2 }
+    }
+  },
+  {
+    "condition": {
+      "operatorCode": 10160,
+      "chargerStation": "佳里站",
+      "chargerId": 3
+    },
+    "action": {
+      "chargerId": { "3": 7 },
+      "chargerSn": { "1": 1, "2": 2 }
+    }
+  },
+  {
+    "condition": {
+      "operatorCode": 10160,
+      "chargerStation": "佳里站",
+      "chargerId": 4
+    },
+    "action": {
+      "chargerId": { "4": 8 },
+      "chargerSn": { "1": 1, "2": 2 }
+    }
+  },
+  {
+    "condition": {
+      "chargerStation": "中港廠",
+      "chargerId": 3
+    },
+    "action": {
+      "chargerId": { "3": 1 },
+      "chargerStation": { "中港廠": "大甲停車場" }
+    }
+  },
+  {
+    "condition": {
+      "chargerStation": "中港廠",
+      "chargerId": 4
+    },
+    "action": {
+      "chargerId": { "4": 2 },
+      "chargerStation": { "中港廠": "大甲停車場" }
+    }
+  }
+]

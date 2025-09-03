@@ -1,0 +1,51 @@
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+resources:
+  - './cronjob-11-1.yaml'
+  - './cronjob-11-2.yaml'
+  - './cronjob-12-1.yaml'
+  - './cronjob-9-1.yaml'
+
+configMapGenerator:
+  - name: charger-edcp-sender-seeds
+    files:
+      - edcpPatcher.json=seeds/edcpPatcher.json
+  - name: charger-edcp-sender-cm
+    envs:
+      - ".env"
+  - name: charger-edcp-sender-target-cm-11-1
+    literals:
+      - TARGET_DATE_RANGE=-32h
+      - TARGET_STATION_CODES=11-1
+  - name: charger-edcp-sender-target-cm-11-2
+    literals:
+      - TARGET_DATE_RANGE=-32h
+      - TARGET_STATION_CODES=11-2
+  - name: charger-edcp-sender-target-cm-12-1
+    literals:
+      - TARGET_DATE_RANGE=-32h
+      - TARGET_STATION_CODES=12-1
+  - name: charger-edcp-sender-target-cm-9-1
+    literals:
+      - TARGET_DATE_RANGE=-32h
+      - TARGET_STATION_CODES=9-1
+
+
+secretGenerator:
+  - name: charger-edcp-sender-secret
+    literals:
+      # docker
+      - STRAPI_API_TOKEN=e6bec22f6988eb9366b2c666eccd277b62aeb15e3eb8377f1d36e9bdd13d975a9d3477a1b68d8cb4924973cd3b5c0e9755b8a777fcf865b2fdd109efc6ab45b5b671df623cdf218233a01b65ba4736f17a67160f6d9e27ed3050e97196ae9eb0811c08ceb6a7f375cb0ba571e29137d61710cfb12132d5f53c0d65e0a4f0b15a
+
+generatorOptions:
+  disableNameSuffixHash: true
+
+namespace: ems
+
+commonLabels:
+  app.maxwin/name: charger-edcp-sender-test
+  app.maxwin/component: backend
+
+images:
+  - name: cicd-so-happy.maxwin.com.tw:5000/charger-edcp-sender
+    newTag: 1.6.10
