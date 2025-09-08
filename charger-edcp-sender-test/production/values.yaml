@@ -30,16 +30,16 @@ secret:
 # extraConfig: 針對不同 station 的 cronjob 的環境變數，會覆寫 commonConfig 重複的環境變數，若無重複則基於 commonConfig 增加
 stations:
   - code: 9-1
-    schedule: "*/5 * * * *"
+    schedule: "*/10 * * * *"
     extraConfig:
       TARGET_DATE_RANGE: -32h
   - code: 10-1
     suffix: "morning"
-    schedule: "*/5 * * * *"
+    schedule: "*/15 * * * *"
     extraConfig:
       TARGET_DATE_RANGE: -32h
   - code: 10-1
     suffix: "afternoon"
-    schedule: "*/5 * * * *"
+    schedule: "*/20 * * * *"
     extraConfig:
       TARGET_DATE_RANGE: -32h
