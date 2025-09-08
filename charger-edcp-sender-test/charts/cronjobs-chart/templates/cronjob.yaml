@@ -1,30 +1,26 @@
+{{- range .Values.stations }}
 apiVersion: batch/v1
 kind: CronJob
 metadata:
-  name: charger-edcp-sender-11-1
+  name: charger-edcp-sender-{{ .code }}{{- if .suffix }}-{{ .suffix }}{{- end }}
 spec:
-  timeZone: 'Asia/Taipei'
-  schedule: '30 7 * * *'
-  suspend: true
-  startingDeadlineSeconds: 72000 # 20 mins
+  timeZone: "Asia/Taipei"
+  schedule: {{ .schedule | quote }}
+  startingDeadlineSeconds: 72000
   concurrencyPolicy: Replace
   jobTemplate:
     spec:
       template:
         spec:
-          # hostNetwork: true
-          # dnsPolicy: ClusterFirstWithHostNet
           containers:
             - name: charger-edcp-sender
-              image: cicd-so-happy.maxwin.com.tw:5000/charger-edcp-sender:1.6.0
-              imagePullPolicy: IfNotPresent
+              image: "{{ $.Values.image.repository }}:{{ $.Values.image.tag }}"
+              imagePullPolicy: {{ $.Values.image.pullPolicy }}
               envFrom:
                 - secretRef:
                     name: charger-edcp-sender-secret
                 - configMapRef:
-                    name: charger-edcp-sender-cm
-                - configMapRef:
-                    name: charger-edcp-sender-target-cm-11-1
+                    name: charger-edcp-sender-target-cm-{{ .code }}{{- if .suffix }}-{{ .suffix }}{{- end }}
               resources:
                 requests:
                   cpu: 256m
@@ -40,3 +36,5 @@ spec:
             configMap:
               name: charger-edcp-sender-seeds
           restartPolicy: Never
+---
+{{- end }}

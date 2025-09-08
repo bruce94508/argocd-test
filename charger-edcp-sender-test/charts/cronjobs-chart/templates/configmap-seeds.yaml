@@ -1,0 +1,7 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: charger-edcp-sender-seeds
+data:
+  edcpPatcher.json: |-
+{{ (.Files.Get "seeds/edcpPatcher.json") | indent 4 }}

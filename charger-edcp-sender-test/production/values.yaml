@@ -1,0 +1,45 @@
+# charger-edcp-sender 使用的 image 版本與拉取策略
+image:
+  repository: cicd-so-happy.maxwin.com.tw:5000/charger-edcp-sender
+  pullPolicy: IfNotPresent
+  tag: "1.6.11"
+
+# charger-edcp-sender 需要的環境變數
+commonConfig:
+  DEBUG: "*,-nodemon*,-logStore*,-ioredis*"
+  DRY_RUN: false
+  EXACT_INDEX: true
+  PARALLEL_ENABLED: false
+  # ELASTIC_API: "http://elastic:mwzaq1@10.40.201.251:30000"
+  # STRAPI_CHARGER_STATION_API: "http://10.40.201.78:1337/api/charger-stations"
+  # STRAPI_EDCP_CHARGE_LOG_API: "http://10.40.201.78:1337/api/edcp-charge-logs"
+  # REDIS_SERVER: "10.40.201.11:6380"
+  ELASTIC_API: http://host.docker.internal:9200
+  STRAPI_CHARGER_STATION_API: http://host.docker.internal:1337/api/charger-stations
+  STRAPI_EDCP_CHARGE_LOG_API: http://host.docker.internal:1337/api/edcp-charge-logs
+  REDIS_SERVER: 10.40.201.11:6380
+
+# charger-edcp-sender 需要的環境變數(需放入 secret 的部分)
+secret:
+  STRAPI_API_TOKEN: "e6bec22f6988eb9366b2c666eccd277b62aeb15e3eb8377f1d36e9bdd13d975a9d3477a1b68d8cb4924973cd3b5c0e9755b8a777fcf865b2fdd109efc6ab45b5b671df623cdf218233a01b65ba4736f17a67160f6d9e27ed3050e97196ae9eb0811c08ceb6a7f375cb0ba571e29137d61710cfb12132d5f53c0d65e0a4f0b15a"
+
+# 各 station 會分別產生一個 cornjob
+# code: station code
+# schedule: cron 表達式
+# suffix: cronjob name 的後綴(預設為空，因 10-1 需做兩次，故加入後綴)
+# extraConfig: 針對不同 station 的 cronjob 的環境變數，會覆寫 commonConfig 重複的環境變數，若無重複則基於 commonConfig 增加
+stations:
+  - code: 9-1
+    schedule: "*/5 * * * *"
+    extraConfig:
+      TARGET_DATE_RANGE: -32h
+  - code: 10-1
+    suffix: "morning"
+    schedule: "*/5 * * * *"
+    extraConfig:
+      TARGET_DATE_RANGE: -32h
+  - code: 10-1
+    suffix: "afternoon"
+    schedule: "*/5 * * * *"
+    extraConfig:
+      TARGET_DATE_RANGE: -32h
