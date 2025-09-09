@@ -1,6 +1,6 @@
 apiVersion: v2
-name: cronjobs-chart
-description: Helm chart for create Cronjobs
+name: charger-edcp-sender-scheduler
+description: Helm chart for create charger-edcp-sender Cronjobs
 
 # A chart can be either an 'application' or a 'library' chart.
 #

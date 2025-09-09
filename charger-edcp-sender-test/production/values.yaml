@@ -4,6 +4,11 @@ image:
   pullPolicy: IfNotPresent
   tag: "1.6.11"
 
+# commonLabels
+commonLabels:
+  app.maxwin/component: backend
+  app.maxwin/name: charger-edcp-sender
+
 # commonConfig 為 charger-edcp-sender 需要的基礎環境變數
 commonConfig:
   DEBUG: "*,-nodemon*,-logStore*,-ioredis*"

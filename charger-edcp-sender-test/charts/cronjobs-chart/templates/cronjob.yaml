@@ -2,7 +2,12 @@
 apiVersion: batch/v1
 kind: CronJob
 metadata:
-  name: charger-edcp-sender-{{ .code }}{{- if .suffix }}-{{ .suffix }}{{- end }}
+  name: {{ $.Release.Name }}-{{ .code }}{{- if .suffix }}-{{ .suffix }}{{- end }}
+  namespace: {{ $.Release.Namespace }}
+  labels:
+{{- range $key, $value := $.Values.commonLabels }}
+    {{ $key }}: {{ $value | quote }}
+{{- end }}
 spec:
   timeZone: "Asia/Taipei"
   schedule: {{ .schedule | quote }}

@@ -2,7 +2,12 @@
 apiVersion: v1
 kind: ConfigMap
 metadata:
-  name: charger-edcp-sender-target-cm-{{ .code }}{{- if .suffix }}-{{ .suffix }}{{- end }}
+  name: {{ $.Release.Name }}-{{ .code }}{{- if .suffix }}-{{ .suffix }}{{- end }}
+  namespace: {{ $.Release.Namespace }}
+  labels:
+{{- range $key, $value := $.Values.commonLabels }}
+    {{ $key }}: {{ $value | quote }}
+{{- end }}
 data:
   TARGET_STATION_CODES: "{{ .code }}"
 {{- $merged := merge $.Values.commonConfig (default dict .extraConfig) }}
