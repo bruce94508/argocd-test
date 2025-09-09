@@ -6,4 +6,5 @@ helmGlobals:
 helmCharts:
   - name: cronjobs-chart
     namespace: ems
+    releaseName: charger-edcp-sender
     valuesFile: values.yaml
