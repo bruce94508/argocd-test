@@ -15,6 +15,7 @@ spec:
   concurrencyPolicy: Replace
   jobTemplate:
     spec:
+      backoffLimit: 3  # 失敗後最多重試次數
       template:
         spec:
           containers:
