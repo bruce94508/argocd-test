@@ -1,0 +1,10 @@
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+
+helmGlobals:
+  chartHome: ../charts
+helmCharts:
+  - name: charger-edcp-sender-scheduler
+    releaseName: charger-edcp-sender-scheduler
+    valuesFile: values.yaml
+    namespace: ems

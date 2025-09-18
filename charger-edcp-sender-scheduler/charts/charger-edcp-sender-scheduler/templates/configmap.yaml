@@ -1,0 +1,18 @@
+{{- range .Values.stations }}
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ $.Release.Name }}-cm-{{ .code }}{{- if .suffix }}-{{ .suffix }}{{- end }}
+  namespace: {{ $.Release.Namespace }}
+  labels:
+{{- range $key, $value := $.Values.commonLabels }}
+    {{ $key }}: {{ $value | quote }}
+{{- end }}
+data:
+  TARGET_STATION_CODES: "{{ .code }}"
+{{- $merged := merge $.Values.commonConfig (default dict .extraConfig) }}
+{{- range $key, $value := $merged }}
+  {{ $key }}: {{ $value | quote }}
+{{- end }}
+---
+{{- end }}

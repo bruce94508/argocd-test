@@ -1,0 +1,56 @@
+{{- range .Values.stations }}
+apiVersion: batch/v1
+kind: CronJob
+metadata:
+  name: {{ $.Release.Name }}-{{ .code }}{{- if .suffix }}-{{ .suffix }}{{- end }}
+  namespace: {{ $.Release.Namespace }}
+  labels:
+{{- range $key, $value := $.Values.commonLabels }}
+    {{ $key }}: {{ $value | quote }}
+{{- end }}
+spec:
+  timeZone: "Asia/Taipei"
+  schedule: {{ .schedule | quote }}
+  startingDeadlineSeconds: 72000
+  concurrencyPolicy: Replace
+  jobTemplate:
+    metadata:
+      labels:
+{{- range $key, $value := $.Values.commonLabels }}
+        {{ $key }}: {{ $value | quote }}
+{{- end }}
+    spec:
+      backoffLimit: 3  # 失敗後最多重試限制次數
+      template:
+        metadata:
+          labels:
+{{- range $key, $value := $.Values.commonLabels }}
+            {{ $key }}: {{ $value | quote }}
+{{- end }}
+        spec:
+          containers:
+            - name: charger-edcp-sender
+              image: "{{ $.Values.image.repository }}:{{ $.Values.image.tag }}"
+              imagePullPolicy: {{ $.Values.image.pullPolicy }}
+              envFrom:
+                - secretRef:
+                    name: {{ $.Release.Name }}-secret
+                - configMapRef:
+                    name: {{ $.Release.Name }}-cm-{{ .code }}{{- if .suffix }}-{{ .suffix }}{{- end }}
+              resources:
+                requests:
+                  cpu: 256m
+                  memory: 512Mi
+                limits:
+                  cpu: 256m
+                  memory: 512Mi
+              volumeMounts:
+              - name: seeds
+                mountPath: /var/maxwin/charger-edcp-sender/seeds
+          volumes:
+          - name: seeds
+            configMap:
+              name: {{ $.Release.Name }}-seeds
+          restartPolicy: Never
+---
+{{- end }}
