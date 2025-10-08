@@ -1,0 +1,60 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: keycloak
+spec:
+  replicas: 1
+  selector: {}
+  template:
+    spec:
+      containers:
+        - name: keycloak
+          image: quay.io/keycloak/keycloak:26.0.6
+          args: ["start-dev"]
+          envFrom:
+            - configMapRef:
+                name: keycloak-cm
+            - secretRef:
+                name: keycloak-secret
+          ports:
+            - name: http
+              containerPort: 8080
+          readinessProbe:
+            httpGet:
+              path: /realms/master
+              port: 8080
+          resources:
+            limits:
+              cpu: "1"
+              memory: 1000Mi
+          volumeMounts:
+            - mountPath: /opt/keycloak/themes
+              name: themes-volume
+            - mountPath: /opt/keycloak/providers
+              name: keycloak-providers
+      initContainers:
+        - name: keycloak-themes-installer
+          image: cicd-so-happy.maxwin.com.tw:5000/keycloak-themes-installer:1.0.2
+          volumeMounts:
+            - mountPath: /opt/keycloak/themes
+              name: themes-volume
+        - name: fetch-apple-provider-jar
+          image: curlimages/curl:8.7.1
+          command:
+            - sh
+            - -c
+            - |
+              set -e
+              echo "Downloading Apple provider JAR..."
+              mkdir -p /providers
+              curl -L -o /providers/apple-identity-provider-1.14.0.jar https://github.com/klausbetz/apple-identity-provider-keycloak/releases/download/1.14.0/apple-identity-provider-1.14.0.jar
+              echo "Downloaded files:"
+              ls -lh /providers
+          volumeMounts:
+            - name: keycloak-providers
+              mountPath: /providers
+      volumes:
+      - name: themes-volume
+        emptyDir: {}
+      - name: keycloak-providers
+        emptyDir: {}
