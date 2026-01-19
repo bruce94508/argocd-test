@@ -13,6 +13,8 @@ spec:
           envFrom:
             - configMapRef:
                 name: charger-event-subscriber-cm
+            - secretRef:
+                name: charger-event-subscriber-secret
           resources:
             limits:
               cpu: 100m
