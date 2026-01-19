@@ -1,0 +1,33 @@
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+resources:
+  - "../bases"
+
+configMapGenerator:
+  - name: charger-event-subscriber-cm
+    behavior: merge
+    envs:
+      - ".env"
+
+secretGenerator:
+  - name: charger-event-subscriber-secret
+    behavior: merge
+    literals:
+      - STRAPI_API_TOKEN=506d25b2e0502d0720ce220a1d1e9ef9447cefdf0a193c8e50a9d57e2438cb5b0cda964bdb139c36320b6bedddf358804262365b4b94764879eaa3f92e699bf06773cc230daf8a684bac208a3a46c7500e1ab71fc012654d79e6bf9469d7d4cbb2009d3b0fcb126096c079337e899ec0e752acf73280f92a8a085235b21c4277
+      - ELASTIC_USERNAME=elastic
+      - ELASTIC_PASSWORD=mwzaq1
+      - DISCORD_WEBHOOK_ALL=https://discord.com/api/webhooks/1459012841842409705/fphp-BKSNOocqXRE14s-NWoDB-dz6uh-4DsL3XJcf5eR1SNbW4_Xd7-BxyUOxONwcOyo
+      - DISCORD_WEBHOOK_14_1=https://discord.com/api/webhooks/1459012949191426211/0pMGpjFgW-enSJ3xgUxJxCTgTfsRPocyerDnmXRf8LXrPz5FNAEloC_NfS2CMw3T8xJV
+
+namespace: ems
+
+generatorOptions:
+  disableNameSuffixHash: true
+
+commonLabels:
+  app.maxwin/name: charger-event-subscriber
+  app.maxwin/component: backend
+
+images:
+  - name: cicd-so-happy.maxwin.com.tw:5000/charger-event-subscriber
+    newTag: 1.0.8

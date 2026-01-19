@@ -1,0 +1,25 @@
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+resources:
+  - "./deployment.yaml"
+
+configMapGenerator:
+  - name: charger-event-subscriber-cm
+    envs:
+      - ".env.example"
+
+secretGenerator:
+  - name: charger-event-subscriber-secret
+    envs:
+      - "secret.env.example"
+
+generatorOptions:
+  disableNameSuffixHash: true
+
+commonLabels:
+  app.maxwin/name: charger-event-subscriber
+  app.maxwin/component: backend
+
+images:
+  - name: cicd-so-happy.maxwin.com.tw:5000/charger-event-subscriber
+    newTag: 1.0.7

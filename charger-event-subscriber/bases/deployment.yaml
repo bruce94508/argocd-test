@@ -1,0 +1,19 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: charger-event-subscriber
+spec:
+  replicas: 1
+  selector: {}
+  template:
+    spec:
+      containers:
+        - image: cicd-so-happy.maxwin.com.tw:5000/charger-event-subscriber:1.0.7
+          name: charger-event-subscriber
+          envFrom:
+            - configMapRef:
+                name: charger-event-subscriber-cm
+          resources:
+            limits:
+              cpu: 100m
+              memory: 128Mi
