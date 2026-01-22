@@ -16,10 +16,27 @@ secretGenerator:
       - STRAPI_API_TOKEN=506d25b2e0502d0720ce220a1d1e9ef9447cefdf0a193c8e50a9d57e2438cb5b0cda964bdb139c36320b6bedddf358804262365b4b94764879eaa3f92e699bf06773cc230daf8a684bac208a3a46c7500e1ab71fc012654d79e6bf9469d7d4cbb2009d3b0fcb126096c079337e899ec0e752acf73280f92a8a085235b21c4277
       - ELASTIC_USERNAME=elastic
       - ELASTIC_PASSWORD=mwzaq1
-      - DISCORD_WEBHOOK_ALL=https://discord.com/api/webhooks/1459012841842409705/fphp-BKSNOocqXRE14s-NWoDB-dz6uh-4DsL3XJcf5eR1SNbW4_Xd7-BxyUOxONwcOyo
-      - DISCORD_WEBHOOK_14_1=https://discord.com/api/webhooks/1459012949191426211/0pMGpjFgW-enSJ3xgUxJxCTgTfsRPocyerDnmXRf8LXrPz5FNAEloC_NfS2CMw3T8xJV
+      - DISCORD_WEBHOOK_ALL=https://discord.com/api/webhooks/1458691753048543312/C_QrfqikcwkGd7iUoFslPE5IME9CEsVsO_6uDDlaLkRYjhJw0Qa1PFYcUqafMiRvw75m
+      - DISCORD_WEBHOOK_14_1=https://discord.com/api/webhooks/1458730817097302069/nYBFXhPBm-v5ShWniDRwP_JGAxhC58O6k9xMPzIsydm2jF7v3YI9T-24H3DQVg-hxNRy
 
 namespace: ems
+
+patches:
+  - target:
+      kind: Deployment
+      name: charger-event-subscriber
+    patch: |-
+      apiVersion: apps/v1
+      kind: Deployment
+      metadata:
+        name: charger-event-subscriber
+      spec:
+        template:
+          spec:
+            hostAliases:
+            - ip: "162.159.135.232"
+              hostnames:
+              - "discord.com"
 
 generatorOptions:
   disableNameSuffixHash: true
