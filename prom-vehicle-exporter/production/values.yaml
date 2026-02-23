@@ -1,0 +1,43 @@
+# image 為 prom-vehicle-exporter 使用的 image 版本與拉取策略
+image:
+  repository: cicd-so-happy.maxwin.com.tw:5000/prom-vehicle-exporter
+  pullPolicy: IfNotPresent
+  tag: 1.4.11
+  containerPort: 3000
+
+# default resources
+resources:
+  limits:
+    cpu: 1
+    memory: 512Mi
+
+labels:
+  app.maxwin/component: backend
+  app.maxwin/name: prom-vehicle-exporter
+
+config:
+  DRY_RUN: false
+  LOG_LEVEL: info
+  NATS_SERVER: 10.40.201.251:30422
+  NATS_SUBJECT: vehicle.aggregate.*
+  PRE_PROCESSED: true
+  TZ: Asia/Taipei
+  VEHICLE_EXPIRED: 30
+
+service:
+  type: ClusterIP
+  port: 3000 # service port
+
+serviceMonitor:
+  enabled: true
+  scrapeInterval: 15s
+  scrapeTimeout: 10s
+  prometheusRelease: my-prom-stack # Prometheus Operator Release Name
+
+targets:
+  - name: group-0
+    env:
+      VIN_GROUP_INDEX: 0
+  - name: group-1
+    env:
+      VIN_GROUP_INDEX: 1

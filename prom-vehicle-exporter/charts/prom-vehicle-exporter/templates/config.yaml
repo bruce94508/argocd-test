@@ -1,0 +1,14 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ $.Release.Name }}-cm
+  namespace: {{ $.Release.Namespace }}
+  {{- with $.Values.labels }}
+  labels:
+    {{- toYaml . | nindent 4 }}
+  {{- end }}
+data:
+  VIN_GROUP_COUNT: {{ len .Values.targets | quote }}
+{{- range $key, $value := $.Values.config }}
+  {{ $key }}: {{ $value | quote }}
+{{- end }}
