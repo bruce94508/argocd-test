@@ -9,10 +9,10 @@ labels:
   app.maxwin/name: prom-vehicle-exporter
 
 # 要建立幾個 group（會自動產生 group-0 ~ group-{N-1} 的 Deployment/Service）
-groupCount: 2
+groupCount: 3
 
 # 每個 Deployment 的 replica 數量
-replicaCount: 1
+replicaCount: 2
 
 # default resources（所有 group 共用）
 resources:
