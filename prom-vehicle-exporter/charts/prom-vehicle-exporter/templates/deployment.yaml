@@ -1,26 +1,26 @@
-{{- range .Values.targets }}
+{{- range $i, $e := until (int $.Values.groupCount) }}
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: {{ $.Release.Name }}-{{ .name | kebabcase }}
+  name: {{ $.Release.Name }}-group-{{ $i }}
   namespace: {{ $.Release.Namespace }}
   labels:
-    app.maxwin/group: {{ .name | kebabcase }}
+    app.maxwin/group: group-{{ $i }}
     {{- with $.Values.labels }}
     {{- toYaml . | nindent 4 }}
     {{- end }}
 spec:
-  replicas: 1
+  replicas: {{ $.Values.replicaCount }}
   selector:
     matchLabels:
-      app.maxwin/group: {{ .name | kebabcase }}
+      app.maxwin/group: group-{{ $i }}
       {{- with $.Values.labels }}
       {{- toYaml . | nindent 6 }}
       {{- end }}
   template:
     metadata:
       labels:
-        app.maxwin/group: {{ .name | kebabcase }}
+        app.maxwin/group: group-{{ $i }}
         {{- with $.Values.labels }}
         {{- toYaml . | nindent 8 }}
         {{- end }}
@@ -33,11 +33,9 @@ spec:
             - configMapRef:
                 name: {{ $.Release.Name }}-cm
           env:
-          {{- range $key, $value := .env }}
-            - name: {{ $key }}
-              value: {{ quote $value }}
-          {{- end }}
-          {{- with .resources | default $.Values.resources}}
+            - name: VIN_GROUP_INDEX
+              value: {{ quote $i }}
+          {{- with $.Values.resources }}
           resources:
             {{- toYaml . | nindent 12 }}
           {{- end }}

@@ -1,11 +1,11 @@
-{{- range .Values.targets }}
+{{- range $i, $e := until (int $.Values.groupCount) }}
 apiVersion: v1
 kind: Service
 metadata:
-  name: {{ $.Release.Name }}-svc-{{ .name | kebabcase }}
+  name: {{ $.Release.Name }}-svc-group-{{ $i }}
   namespace: {{ $.Release.Namespace }}
   labels:
-    app.maxwin/group: {{ .name | kebabcase }}
+    app.maxwin/group: group-{{ $i }}
     {{- with $.Values.labels }}
     {{- toYaml . | nindent 4 }}
     {{- end }}
@@ -16,7 +16,7 @@ spec:
       port: {{ $.Values.service.port }}
       targetPort: http
   selector:
-    app.maxwin/group: {{ .name | kebabcase }}
+    app.maxwin/group: group-{{ $i }}
     {{- with $.Values.labels }}
     {{- toYaml . | nindent 4 }}
     {{- end }}

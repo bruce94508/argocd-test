@@ -8,7 +8,7 @@ metadata:
     {{- toYaml . | nindent 4 }}
   {{- end }}
 data:
-  VIN_GROUP_COUNT: {{ len .Values.targets | quote }}
+  VIN_GROUP_COUNT: {{ .Values.groupCount | quote }}
 {{- range $key, $value := $.Values.config }}
   {{ $key }}: {{ $value | quote }}
 {{- end }}
