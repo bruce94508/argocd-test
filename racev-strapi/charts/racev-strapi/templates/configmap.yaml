@@ -1,0 +1,26 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ .Release.Name }}-apijs-cm
+  namespace: {{ $.Release.Namespace }}
+  {{- with $.Values.labels }}
+  labels:
+    {{- toYaml . | nindent 4 }}
+  {{- end }}
+data:
+  api.js: |
+{{ .Values.apiJsConfig | indent 4 }}
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ $.Release.Name }}-cm
+  namespace: {{ $.Release.Namespace }}
+  {{- with $.Values.labels }}
+  labels:
+    {{- toYaml . | nindent 4 }}
+  {{- end }}
+data:
+{{- range $key, $value := $.Values.config }}
+  {{ $key }}: {{ $value | quote }}
+{{- end }}

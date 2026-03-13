@@ -1,0 +1,74 @@
+replicaCount: 2
+
+image:
+  repository: cicd-so-happy.maxwin.com.tw:5000/racev-strapi
+  tag: "1.18.0"
+  pullPolicy: IfNotPresent
+
+labels:
+  app.maxwin/component: backend
+  app.maxwin/name: racev-strapi
+
+service:
+  type: ClusterIP
+  port: 1337 # service port
+
+persistence:
+  # /public/uploads 資料夾
+  uploads:
+    enabled: true # 關掉的話就不會建立 pvc，只產生一個暫存的空資料夾來儲存
+    storageClass: "longhorn"
+    size: 100Mi
+
+apiJsConfig: |-
+  module.exports = {
+    rest: {
+      defaultLimit: 300,
+      maxLimit: 300,
+      withCount: true,
+    },
+  };
+
+config:
+  TZ: Asia/Taipei
+  DATABASE_HOST: 10.40.201.78
+  DATABASE_PORT: 3306
+  PUBLIC_URL: http://10.40.201.78:1337
+  STRAPI_ADMIN_OIDC_ENABLED: true
+  STRAPI_ADMIN_OIDC_ISSUER: RACEV-OIDC
+  OIDC_REDIRECT_URI: http://10.40.201.78:1337/strapi-plugin-sso/oidc/callback
+  OIDC_CLIENT_ID: racev-strapi-admin-oidc
+  OIDC_AUTHORIZATION_ENDPOINT: https://cloud.maxwin.com.tw/auth/realms/racev/protocol/openid-connect/auth
+  OIDC_TOKEN_ENDPOINT: https://cloud.maxwin.com.tw/auth/realms/racev/protocol/openid-connect/token
+  OIDC_USER_INFO_ENDPOINT: https://cloud.maxwin.com.tw/auth/realms/racev/protocol/openid-connect/userinfo
+
+secret:
+  APP_KEYS: /4jSerC47WkxSnKE9yCrWQ==,o85yLhLDTCaFu46JfuznEA==,X1afbql/rn41EjHa6lV4XA==,G8aZu4meVzYJSWTlBJarLw==
+  API_TOKEN_SALT: 20tTEv8SIK8XAUhonHQr3g==
+  ADMIN_JWT_SECRET: JCDaGmGM5mr2GwNNOjF9kQ==
+  JWT_SECRET: Zec8t9+LrEBnWgnUqvKjZA==
+  DATABASE_NAME: racev-strapi
+  DATABASE_USERNAME: strapi
+  DATABASE_PASSWORD: maxwin8074
+  OIDC_CLIENT_SECRET: K2PjVBLXCLrvoAqgWfMoInnyf5y8f70L
+
+resources:
+  requests:
+    cpu: 250m
+    memory: 512Mi
+  limits:
+    cpu: 500m
+    memory: 1Gi
+
+probes:
+  liveness:
+    initialDelaySeconds: 60
+    periodSeconds: 10
+    timeoutSeconds: 5
+    failureThreshold: 3
+  readiness:
+    initialDelaySeconds: 30
+    periodSeconds: 10
+    timeoutSeconds: 5
+    successThreshold: 1
+    failureThreshold: 3
