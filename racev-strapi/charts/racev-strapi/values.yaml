@@ -16,7 +16,7 @@ service:
 persistence:
   # /public/uploads 資料夾
   uploads:
-    enabled: true # 關掉的話就不會建立 pvc，只產生一個暫存的空資料夾來儲存
+    enabled: false # 關掉的話就不會建立 pvc，只產生一個暫存的空資料夾來儲存
     storageClass: "longhorn"
     size: 100Mi
 
