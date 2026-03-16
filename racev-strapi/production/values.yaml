@@ -61,12 +61,12 @@ resources:
 
 probes:
   liveness:
-    initialDelaySeconds: 600
+    initialDelaySeconds: 60
     periodSeconds: 10
     timeoutSeconds: 5
     failureThreshold: 3
   readiness:
-    initialDelaySeconds: 300
+    initialDelaySeconds: 30
     periodSeconds: 10
     timeoutSeconds: 5
     successThreshold: 1
