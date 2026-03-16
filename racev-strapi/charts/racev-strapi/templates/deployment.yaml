@@ -38,23 +38,25 @@ spec:
                 name: {{ $.Release.Name }}-cm
             - secretRef:
                 name: {{ $.Release.Name }}-secret
-          # livenessProbe:
-          #   httpGet:
-          #     path: /
-          #     port: http
-          #   initialDelaySeconds: {{ .Values.probes.liveness.initialDelaySeconds }}
-          #   periodSeconds: {{ .Values.probes.liveness.periodSeconds }}
-          #   timeoutSeconds: {{ .Values.probes.liveness.timeoutSeconds }}
-          #   failureThreshold: {{ .Values.probes.liveness.failureThreshold }}
-          # readinessProbe:
-          #   httpGet:
-          #     path: /
-          #     port: http
-          #   initialDelaySeconds: {{ .Values.probes.readiness.initialDelaySeconds }}
-          #   periodSeconds: {{ .Values.probes.readiness.periodSeconds }}
-          #   timeoutSeconds: {{ .Values.probes.readiness.timeoutSeconds }}
-          #   successThreshold: {{ .Values.probes.readiness.successThreshold }}
-          #   failureThreshold: {{ .Values.probes.readiness.failureThreshold }}
+          {{- /*
+          livenessProbe:
+            httpGet:
+              path: /
+              port: http
+            initialDelaySeconds: {{ .Values.probes.liveness.initialDelaySeconds }}
+            periodSeconds: {{ .Values.probes.liveness.periodSeconds }}
+            timeoutSeconds: {{ .Values.probes.liveness.timeoutSeconds }}
+            failureThreshold: {{ .Values.probes.liveness.failureThreshold }}
+          readinessProbe:
+            httpGet:
+              path: /
+              port: http
+            initialDelaySeconds: {{ .Values.probes.readiness.initialDelaySeconds }}
+            periodSeconds: {{ .Values.probes.readiness.periodSeconds }}
+            timeoutSeconds: {{ .Values.probes.readiness.timeoutSeconds }}
+            successThreshold: {{ .Values.probes.readiness.successThreshold }}
+            failureThreshold: {{ .Values.probes.readiness.failureThreshold }}
+          */ -}}
           volumeMounts:
             - name: apijs-config-volume
               mountPath: /var/maxwin/racev-strapi/config/api.js
