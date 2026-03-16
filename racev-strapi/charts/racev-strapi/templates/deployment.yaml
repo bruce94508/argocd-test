@@ -38,7 +38,7 @@ spec:
                 name: {{ $.Release.Name }}-cm
             - secretRef:
                 name: {{ $.Release.Name }}-secret
-          {{- /*
+          {{ /*
           livenessProbe:
             httpGet:
               path: /
@@ -56,7 +56,7 @@ spec:
             timeoutSeconds: {{ .Values.probes.readiness.timeoutSeconds }}
             successThreshold: {{ .Values.probes.readiness.successThreshold }}
             failureThreshold: {{ .Values.probes.readiness.failureThreshold }}
-          */ -}}
+          */ }}
           volumeMounts:
             - name: apijs-config-volume
               mountPath: /var/maxwin/racev-strapi/config/api.js
