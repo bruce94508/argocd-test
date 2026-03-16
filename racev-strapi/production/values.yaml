@@ -29,7 +29,6 @@ apiJsConfig: |-
   };
 
 config:
-  HOST: 0.0.0.0
   TZ: Asia/Taipei
   DATABASE_HOST: 10.40.1.105
   DATABASE_PORT: 3307
@@ -59,16 +58,15 @@ resources:
   limits:
     cpu: 1
     memory: 3Gi
-
-probes:
-  liveness:
-    initialDelaySeconds: 60
-    periodSeconds: 10
-    timeoutSeconds: 5
-    failureThreshold: 3
-  readiness:
-    initialDelaySeconds: 30
-    periodSeconds: 10
-    timeoutSeconds: 5
-    successThreshold: 1
-    failureThreshold: 3
+# probes:
+#   liveness:
+#     initialDelaySeconds: 60
+#     periodSeconds: 10
+#     timeoutSeconds: 5
+#     failureThreshold: 3
+#   readiness:
+#     initialDelaySeconds: 30
+#     periodSeconds: 10
+#     timeoutSeconds: 5
+#     successThreshold: 1
+#     failureThreshold: 3
