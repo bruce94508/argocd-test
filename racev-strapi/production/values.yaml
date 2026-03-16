@@ -1,4 +1,4 @@
-replicaCount: 1
+replicaCount: 2
 
 image:
   repository: cicd-so-happy.maxwin.com.tw:5000/racev-strapi
