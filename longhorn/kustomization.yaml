@@ -1,0 +1,13 @@
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+
+# 確保所有資源都進入正確的 namespace
+namespace: longhorn-system
+
+helmCharts:
+  - name: longhorn
+    releaseName: longhorn
+    repo: https://charts.longhorn.io
+    version: 1.6.2
+    includeCRDs: true # 部署 Longhorn 必備
+    valuesFile: values.yaml # 引用下方的設定檔

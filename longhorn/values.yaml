@@ -1,0 +1,10 @@
+defaultSettings:
+  # 單節點 Minikube 核心設定：
+  defaultReplicaCount: 1 # 副本數設為 1，否則 Volume 會卡在 Degraded 狀態
+  replicaSoftAntiAffinity: true # 允許副本放在同一個節點上
+
+  # RWX 測試輔助：
+  nfs-installation-check: true # 啟動時自動檢查節點是否有 nfs-common
+
+persistence:
+  defaultClass: true # 將 Longhorn 設為預設的 StorageClass
