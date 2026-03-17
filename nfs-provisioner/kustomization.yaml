@@ -8,4 +8,5 @@ helmCharts:
     repo: https://kubernetes-sigs.github.io/nfs-ganesha-server-and-external-provisioner/
     version: 1.8.0
     releaseName: nfs-provisioner
+    namespace: nfs-system
     valuesFile: values.yaml
