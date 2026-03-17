@@ -15,7 +15,7 @@ service:
 
 persistence:
   uploads:
-    enabled: false
+    enabled: true
     storageClass: "longhorn"
     size: 100Mi
 
