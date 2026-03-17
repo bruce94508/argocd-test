@@ -8,3 +8,6 @@ defaultSettings:
 
 persistence:
   defaultClass: true # 將 Longhorn 設為預設的 StorageClass
+
+preUpgradeChecker:
+  jobEnabled: false
