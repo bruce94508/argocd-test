@@ -4,7 +4,7 @@ kind: Kustomization
 namespace: nfs-system
 
 helmCharts:
-  - name: nfs-ganesha-server-and-external-provisioner
+  - name: nfs-server-provisioner
     repo: https://kubernetes-sigs.github.io/nfs-ganesha-server-and-external-provisioner/
     version: 1.8.0
     releaseName: nfs-provisioner
