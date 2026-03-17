@@ -1,0 +1,16 @@
+persistence:
+  enabled: true
+  size: 500Mi
+  storageClass: "standard" # 向 Minikube 拿底層空間
+
+storageClass:
+  name: nfs-rwx
+  allowVolumeExpansion: true
+  reclaimPolicy: Delete
+  isDefaultClass: false
+  mountOptions:
+    - vers=4.1
+    - noatime
+    - soft
+    - rsize=1048576
+    - wsize=1048576
