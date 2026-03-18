@@ -3,8 +3,10 @@ kind: Kustomization
 
 namespace: nfs-provisioner
 
-commonLabels:
-  app.kubernetes.io/name: nfs-provisioner
+labels:
+  - pairs:
+      app.kubernetes.io/name: nfs-provisioner
+    includeSelectors: true
 
 helmCharts:
   - name: nfs-server-provisioner
@@ -16,7 +18,17 @@ helmCharts:
 
 patches:
   - target:
-      kind: "*"
+      kind: Service
+    patch: |
+      metadata:
+        namespace: nfs-provisioner
+  - target:
+      kind: ServiceAccount
+    patch: |
+      metadata:
+        namespace: nfs-provisioner
+  - target:
+      kind: StatefulSet
     patch: |
       metadata:
         namespace: nfs-provisioner
