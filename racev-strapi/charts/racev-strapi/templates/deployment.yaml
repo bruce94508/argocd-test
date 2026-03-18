@@ -40,7 +40,9 @@ spec:
                 name: {{ $.Release.Name }}-secret
           {{- if .Values.probes }}
           {{- $publicUrl := index .Values.config "PUBLIC_URL" | default "http://localhost/" }}
-          {{- $probePath := (urlParse $publicUrl).path | default "/" }}
+          {{- $rawPath := (urlParse $publicUrl).path | default "" }}
+          {{- $basePath := printf "%s/" (trimSuffix "/" $rawPath) }}
+          {{- $probePath := printf "%s_health" $basePath }}
           livenessProbe:
             httpGet:
               path: {{ $probePath }}
