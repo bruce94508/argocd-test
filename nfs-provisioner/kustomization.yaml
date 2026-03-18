@@ -3,6 +3,9 @@ kind: Kustomization
 
 namespace: nfs-provisioner
 
+resources:
+  - namespace.yaml
+
 helmCharts:
   - name: nfs-server-provisioner
     repo: https://kubernetes-sigs.github.io/nfs-ganesha-server-and-external-provisioner/
@@ -10,24 +13,4 @@ helmCharts:
     releaseName: nfs-provisioner
     namespace: nfs-provisioner
     valuesFile: values.yaml
-
-patches:
-  - target:
-      kind: Service
-    patch: |
-      - op: add
-        path: /metadata/namespace
-        value: nfs-provisioner
-  - target:
-      kind: ServiceAccount
-    patch: |
-      - op: add
-        path: /metadata/namespace
-        value: nfs-provisioner
-  - target:
-      kind: StatefulSet
-    patch: |
-      - op: add
-        path: /metadata/namespace
-        value: nfs-provisioner
 
