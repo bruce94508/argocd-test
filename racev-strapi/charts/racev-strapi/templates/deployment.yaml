@@ -20,6 +20,8 @@ spec:
       labels:
         {{- toYaml . | nindent 8 }}
       {{- end }}
+      annotations:
+        checksum/config: {{ include (print $.Template.BasePath "/configmap.yaml") . | sha256sum }}
     spec:
       {{- if .Values.persistence.buildCache.enabled }}
       # Init Container: 負責 Hash 比對與 npm run build，完成後 Main Container 才會啟動
