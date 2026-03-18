@@ -39,9 +39,11 @@ spec:
             - secretRef:
                 name: {{ $.Release.Name }}-secret
           {{- if .Values.probes }}
+          {{- $publicUrl := index .Values.config "PUBLIC_URL" | default "http://localhost/" }}
+          {{- $probePath := (urlParse $publicUrl).path | default "/" }}
           livenessProbe:
             httpGet:
-              path: /
+              path: {{ $probePath }}
               port: http
             initialDelaySeconds: {{ .Values.probes.liveness.initialDelaySeconds }}
             periodSeconds: {{ .Values.probes.liveness.periodSeconds }}
@@ -49,7 +51,7 @@ spec:
             failureThreshold: {{ .Values.probes.liveness.failureThreshold }}
           readinessProbe:
             httpGet:
-              path: /
+              path: {{ $probePath }}
               port: http
             initialDelaySeconds: {{ .Values.probes.readiness.initialDelaySeconds }}
             periodSeconds: {{ .Values.probes.readiness.periodSeconds }}
