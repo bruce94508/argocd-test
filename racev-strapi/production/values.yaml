@@ -20,8 +20,8 @@ persistence:
     size: 5Gi
   buildCache:
     enabled: true
-    storageClass: "longhorn"
-    size: 2Gi
+    storageClass: "nfs-rwx"
+    size: 1Gi
 
 configHooks:
   api.js: |-
