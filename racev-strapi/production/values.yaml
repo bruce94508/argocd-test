@@ -35,7 +35,7 @@ configHooks:
 
 config:
   TZ: Asia/Taipei
-  DATABASE_HOST: 10.40.1.105
+  DATABASE_HOST: 10.40.1.106
   DATABASE_PORT: 3307
   PUBLIC_URL: http://localhost:1337
   STRAPI_ADMIN_OIDC_ENABLED: true
