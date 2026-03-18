@@ -48,9 +48,16 @@ spec:
           image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
           imagePullPolicy: {{ .Values.image.pullPolicy }}
           {{- if .Values.persistence.buildCache.enabled }}
-          # 覆蓋 Dockerfile 的 ENTRYPOINT，跳過 docker-entrypoint.sh 直接啟動
-          # （Build 已由 Init Container 處理完畢）
-          command: ["npm", "start"]
+          # Main Container 計算 Hash，並把專屬資料夾 symlink 到容器內
+          command: ["/bin/sh", "-c"]
+          args:
+            - |
+              CURRENT_ENV="${PUBLIC_URL}_${STRAPI_ADMIN_OIDC_ENABLED}_${STRAPI_ADMIN_OIDC_ISSUER}"
+              CURRENT_HASH=$(echo -n "$CURRENT_ENV" | md5sum | awk '{print $1}')
+              echo "Linking build cache: build_${CURRENT_HASH}"
+              rm -rf /var/maxwin/racev-strapi/build
+              ln -s /shared-data/build_${CURRENT_HASH} /var/maxwin/racev-strapi/build
+              exec npm start
           {{- end }}
           ports:
             - containerPort: 1337
@@ -100,10 +107,9 @@ spec:
               mountPath: /var/maxwin/racev-strapi/public/uploads
             {{- end }}
             {{- if .Values.persistence.buildCache.enabled }}
-            # 掛載 PVC 內 Init Container 編譯好的 build 資料夾
+            # 掛載整個 PVC 到 /shared-data，讓啟動腳本去 symlink 專屬的 Hash 資料夾
             - name: shared-build
-              mountPath: /var/maxwin/racev-strapi/build
-              subPath: build
+              mountPath: /shared-data
             {{- end }}
       volumes:
         - name: config-hooks-volume
