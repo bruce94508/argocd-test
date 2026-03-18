@@ -1,0 +1,30 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: local-proxy
+  namespace: apts-racev
+  labels:
+    app: local-proxy
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: local-proxy
+  template:
+    metadata:
+      labels:
+        app: local-proxy
+    spec:
+      containers:
+        - name: nginx
+          image: nginx:alpine
+          ports:
+            - containerPort: 80
+          volumeMounts:
+            - name: nginx-config
+              mountPath: /etc/nginx/conf.d/default.conf
+              subPath: default.conf
+      volumes:
+        - name: nginx-config
+          configMap:
+            name: local-proxy-config

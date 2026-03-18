@@ -1,0 +1,31 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: local-proxy-config
+  namespace: apts-racev
+data:
+  default.conf: |
+    server {
+        listen 80;
+        
+        # 將對代理伺服器 /racev-strapi 的請求，原封不動轉發給後端
+        # 這裡不使用結尾斜線，確保路徑不被截斷
+        location /racev-strapi {
+            proxy_pass http://racev-strapi.apts-racev.svc.cluster.local:1337;
+            
+            proxy_http_version 1.1;
+            proxy_set_header Upgrade $http_upgrade;
+            proxy_set_header Connection 'upgrade';
+            proxy_set_header Host $host;
+            proxy_cache_bypass $http_upgrade;
+            
+            proxy_set_header X-Real-IP $remote_addr;
+            proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+            proxy_set_header X-Forwarded-Proto $scheme;
+        }
+
+        # Health check endpoint
+        location /healthz {
+            return 200 'OK';
+        }
+    }
