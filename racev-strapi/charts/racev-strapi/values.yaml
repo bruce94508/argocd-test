@@ -19,6 +19,11 @@ persistence:
     enabled: false # 關掉的話就不會建立 pvc，只產生一個暫存的空資料夾來儲存
     storageClass: ""
     size: 100Mi
+  # strapi build 資料夾快取 (Init Container 使用)
+  buildCache:
+    enabled: false # 開啟後會啟用 Init Container 機制，讓 build 結果可跨 Pod 重啟快取
+    storageClass: ""
+    size: 2Gi
 
 # 可以放一些 strapi 啟動前要先掛載的設定檔，key 是檔名，value 是檔案內容
 configHooks: {}
@@ -71,7 +76,7 @@ probes:
   startup:
     initialDelaySeconds: 60 # 先等 60 秒再開始探測
     periodSeconds: 10 # 每 10 秒探測一次
-    failureThreshold: 120 # 10s * 120 = 最多給 120 秒 (2 分鐘) Build
+    failureThreshold: 12 # 10s * 12 = 最多給 120 秒 (2 分鐘) Build
   liveness:
     initialDelaySeconds: 0 # 有 startup 確認服務已啟動，這裡改成 0 即可
     periodSeconds: 20

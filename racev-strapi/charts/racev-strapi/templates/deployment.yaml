@@ -21,10 +21,35 @@ spec:
         {{- toYaml . | nindent 8 }}
       {{- end }}
     spec:
+      {{- if .Values.persistence.buildCache.enabled }}
+      # Init Container: 負責 Hash 比對與 npm run build，完成後 Main Container 才會啟動
+      initContainers:
+        - name: strapi-builder
+          image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
+          imagePullPolicy: {{ .Values.image.pullPolicy }}
+          workingDir: /var/maxwin/racev-strapi
+          # 覆蓋 Dockerfile 的 ENTRYPOINT，直接執行掛載進來的 build 腳本
+          command: ["/scripts/init-build.sh"]
+          envFrom:
+            - configMapRef:
+                name: {{ $.Release.Name }}-cm
+            - secretRef:
+                name: {{ $.Release.Name }}-secret
+          volumeMounts:
+            - name: shared-build
+              mountPath: /shared-data
+            - name: build-script
+              mountPath: /scripts
+      {{- end }}
       containers:
         - name: strapi
           image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
           imagePullPolicy: {{ .Values.image.pullPolicy }}
+          {{- if .Values.persistence.buildCache.enabled }}
+          # 覆蓋 Dockerfile 的 ENTRYPOINT，跳過 docker-entrypoint.sh 直接啟動
+          # （Build 已由 Init Container 處理完畢）
+          command: ["npm", "start"]
+          {{- end }}
           ports:
             - containerPort: 1337
               name: http
@@ -72,6 +97,12 @@ spec:
             - name: uploads-volume
               mountPath: /var/maxwin/racev-strapi/public/uploads
             {{- end }}
+            {{- if .Values.persistence.buildCache.enabled }}
+            # 掛載 PVC 內 Init Container 編譯好的 build 資料夾
+            - name: shared-build
+              mountPath: /var/maxwin/racev-strapi/build
+              subPath: build
+            {{- end }}
       volumes:
         - name: config-hooks-volume
           configMap:
@@ -83,4 +114,13 @@ spec:
         {{- else }}
         - name: uploads-volume
           emptyDir: {}
+        {{- end }}
+        {{- if .Values.persistence.buildCache.enabled }}
+        - name: shared-build
+          persistentVolumeClaim:
+            claimName: {{ .Release.Name }}-build-cache-pvc
+        - name: build-script
+          configMap:
+            name: {{ .Release.Name }}-build-script-cm
+            defaultMode: 0755
         {{- end }}

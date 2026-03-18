@@ -18,6 +18,10 @@ persistence:
     enabled: false
     storageClass: "longhorn"
     size: 5Gi
+  buildCache:
+    enabled: true
+    storageClass: "longhorn"
+    size: 2Gi
 
 configHooks:
   api.js: |-
@@ -64,7 +68,7 @@ probes:
   startup:
     initialDelaySeconds: 60
     periodSeconds: 10
-    failureThreshold: 120
+    failureThreshold: 12
   liveness:
     initialDelaySeconds: 0
     periodSeconds: 20

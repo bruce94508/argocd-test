@@ -26,3 +26,61 @@ data:
 {{- range $key, $value := $.Values.config }}
   {{ $key }}: {{ $value | quote }}
 {{- end }}
+---
+{{- if .Values.persistence.buildCache.enabled }}
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ $.Release.Name }}-build-script-cm
+  namespace: {{ $.Release.Namespace }}
+  {{- with $.Values.labels }}
+  labels:
+    {{- toYaml . | nindent 4 }}
+  {{- end }}
+data:
+  init-build.sh: |
+    #!/bin/sh
+    set -e
+    echo "開始初始化檢查..."
+
+    # 只計算會影響前端 Build 結果的環境變數
+    CURRENT_ENV="${PUBLIC_URL}_${STRAPI_ADMIN_OIDC_ENABLED}_${STRAPI_ADMIN_OIDC_ISSUER}"
+    CURRENT_HASH=$(echo -n "$CURRENT_ENV" | md5sum | awk '{print $1}')
+
+    HASH_FILE="/shared-data/.env_hash"
+    LOCK_DIR="/shared-data/build.lock"
+    BUILD_DEST="/shared-data/build"
+
+    # 1. 若 Hash 相同且 build 資料夾存在，直接跳過
+    if [ -f "$HASH_FILE" ] && [ "$(cat $HASH_FILE)" = "$CURRENT_HASH" ] && [ -d "$BUILD_DEST" ]; then
+      echo "環境變數無變化 ($CURRENT_HASH)，跳過 npm run build！"
+      exit 0
+    fi
+
+    # 2. Hash 不同或首次啟動，搶鎖後進行 Build
+    # mkdir 是原子操作，多個 Pod 同時啟動時只有第一個會成功
+    if mkdir "$LOCK_DIR" 2>/dev/null; then
+      echo "成功取得編譯鎖定！開始執行 npm run build..."
+
+      npm run build
+
+      # 把 build 結果複製到 PVC
+      rm -rf "$BUILD_DEST"
+      cp -r build "$BUILD_DEST"
+
+      # 寫入新的 Hash
+      echo "$CURRENT_HASH" > "$HASH_FILE"
+
+      # 釋放鎖定
+      rmdir "$LOCK_DIR"
+      echo "編譯完成，釋放鎖定！"
+    else
+      echo "其他 Pod 正在執行編譯，進入等待模式..."
+      # 每 3 秒檢查一次，等待搶到鎖的 Pod 完成並釋放
+      while [ -d "$LOCK_DIR" ]; do
+        sleep 3
+        echo "等待編譯完成..."
+      done
+      echo "其他 Pod 編譯完畢，繼續啟動！"
+    fi
+{{- end }}

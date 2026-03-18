@@ -16,3 +16,22 @@ spec:
     requests:
       storage: {{ .Values.persistence.uploads.size }}
 {{- end }}
+---
+{{- if .Values.persistence.buildCache.enabled }}
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: {{ .Release.Name }}-build-cache-pvc
+  namespace: {{ .Release.Namespace }}
+  {{- with .Values.labels }}
+  labels:
+    {{- toYaml . | nindent 4 }}
+  {{- end }}
+spec:
+  storageClassName: {{ .Values.persistence.buildCache.storageClass }}
+  accessModes:
+    - ReadWriteMany
+  resources:
+    requests:
+      storage: {{ .Values.persistence.buildCache.size }}
+{{- end }}
