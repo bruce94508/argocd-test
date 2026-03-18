@@ -68,14 +68,12 @@ resources:
     memory: 1Gi
 
 probes:
+  startup:
+    initialDelaySeconds: 60 # 先等 60 秒再開始探測
+    periodSeconds: 10 # 每 10 秒探測一次
+    failureThreshold: 120 # 10s * 120 = 最多給 120 秒 (2 分鐘) Build
   liveness:
-    initialDelaySeconds: 60
-    periodSeconds: 10
+    initialDelaySeconds: 0 # 有 startup 確認服務已啟動，這裡改成 0 即可
+    periodSeconds: 20
     timeoutSeconds: 5
-    failureThreshold: 3
-  readiness:
-    initialDelaySeconds: 30
-    periodSeconds: 10
-    timeoutSeconds: 5
-    successThreshold: 1
     failureThreshold: 3

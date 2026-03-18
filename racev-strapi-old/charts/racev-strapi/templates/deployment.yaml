@@ -39,6 +39,16 @@ spec:
             - secretRef:
                 name: {{ $.Release.Name }}-secret
           {{- if .Values.probes }}
+          {{- if .Values.probes.startup }}
+          startupProbe:
+            httpGet:
+              path: /
+              port: http
+            initialDelaySeconds: {{ .Values.probes.startup.initialDelaySeconds }}
+            periodSeconds: {{ .Values.probes.startup.periodSeconds }}
+            failureThreshold: {{ .Values.probes.startup.failureThreshold }}
+          {{- end }}
+          {{- if .Values.probes.liveness }}
           livenessProbe:
             httpGet:
               path: /
@@ -47,6 +57,7 @@ spec:
             periodSeconds: {{ .Values.probes.liveness.periodSeconds }}
             timeoutSeconds: {{ .Values.probes.liveness.timeoutSeconds }}
             failureThreshold: {{ .Values.probes.liveness.failureThreshold }}
+          {{- end }}
           readinessProbe:
             httpGet:
               path: /
