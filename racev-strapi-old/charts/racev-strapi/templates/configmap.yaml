@@ -1,17 +1,15 @@
 apiVersion: v1
 kind: ConfigMap
 metadata:
-  name: {{ .Release.Name }}-config-hooks-cm
+  name: {{ .Release.Name }}-apijs-cm
   namespace: {{ $.Release.Namespace }}
   {{- with $.Values.labels }}
   labels:
     {{- toYaml . | nindent 4 }}
   {{- end }}
 data:
-{{- range $key, $value := $.Values.configHooks }}
-  {{ $key }}: |-
-{{ $value | indent 4 }}
-{{- end }}
+  api.js: |
+{{ .Values.apiJsConfig | indent 4 }}
 ---
 apiVersion: v1
 kind: ConfigMap

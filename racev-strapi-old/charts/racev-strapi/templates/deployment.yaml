@@ -58,22 +58,17 @@ spec:
             failureThreshold: {{ .Values.probes.readiness.failureThreshold }}
           {{- end }}
           volumeMounts:
-            {{- with .Values.configHooks }}
-            {{- $hooks := . }}
-            {{- range (keys . | sortAlpha) }}
-            - name: config-hooks-volume
-              mountPath: /var/maxwin/racev-strapi/config/{{ . }}
-              subPath: {{ . | quote }}
-            {{- end }}
-            {{- end }}
+            - name: apijs-config-volume
+              mountPath: /var/maxwin/racev-strapi/config/api.js
+              subPath: api.js
             {{- if .Values.persistence.uploads.enabled }}
             - name: uploads-volume
               mountPath: /var/maxwin/racev-strapi/public/uploads
             {{- end }}
       volumes:
-        - name: config-hooks-volume
+        - name: apijs-config-volume
           configMap:
-            name: {{ .Release.Name }}-config-hooks-cm
+            name: {{ .Release.Name }}-apijs-cm
         {{- if .Values.persistence.uploads.enabled }}
         - name: uploads-volume
           persistentVolumeClaim:

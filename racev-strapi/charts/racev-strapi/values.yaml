@@ -16,41 +16,48 @@ service:
 persistence:
   # /public/uploads 資料夾
   uploads:
-    enabled: true # 關掉的話就不會建立 pvc，只產生一個暫存的空資料夾來儲存
-    storageClass: "longhorn"
+    enabled: false # 關掉的話就不會建立 pvc，只產生一個暫存的空資料夾來儲存
+    storageClass: ""
     size: 100Mi
 
-apiJsConfig: |-
-  module.exports = {
-    rest: {
-      defaultLimit: 300,
-      maxLimit: 300,
-      withCount: true,
-    },
-  };
+# 可以放一些 strapi 啟動前要先掛載的設定檔，key 是檔名，value 是檔案內容
+configHooks: {}
+
+# apiJsConfig: |-
+#   module.exports = {
+#     rest: {
+#       defaultLimit: 300,
+#       maxLimit: 300,
+#       withCount: true,
+#     },
+#   };
 
 config:
+  # for strapi
   TZ: Asia/Taipei
-  DATABASE_HOST: 10.40.201.78
+  DATABASE_HOST: mysql
   DATABASE_PORT: 3306
-  PUBLIC_URL: http://10.40.201.78:1337
-  STRAPI_ADMIN_OIDC_ENABLED: true
-  STRAPI_ADMIN_OIDC_ISSUER: RACEV-OIDC
-  OIDC_REDIRECT_URI: http://10.40.201.78:1337/strapi-plugin-sso/oidc/callback
-  OIDC_CLIENT_ID: racev-strapi-admin-oidc
-  OIDC_AUTHORIZATION_ENDPOINT: https://cloud.maxwin.com.tw/auth/realms/racev/protocol/openid-connect/auth
-  OIDC_TOKEN_ENDPOINT: https://cloud.maxwin.com.tw/auth/realms/racev/protocol/openid-connect/token
-  OIDC_USER_INFO_ENDPOINT: https://cloud.maxwin.com.tw/auth/realms/racev/protocol/openid-connect/userinfo
+  PUBLIC_URL: http://localhost:1337
+  # for oidc
+  STRAPI_ADMIN_OIDC_ENABLED: false
+  STRAPI_ADMIN_OIDC_ISSUER: KEYCLOAK-OIDC
+  OIDC_REDIRECT_URI: http://localhost:1337/strapi-plugin-sso/oidc/callback
+  OIDC_CLIENT_ID: my-oidc-client
+  OIDC_AUTHORIZATION_ENDPOINT: https://my.keycloak.host/auth/realms/myrealms/protocol/openid-connect/auth
+  OIDC_TOKEN_ENDPOINT: https://my.keycloak.host/auth/realms/myrealms/protocol/openid-connect/token
+  OIDC_USER_INFO_ENDPOINT: https://my.keycloak.host/auth/realms/myrealms/protocol/openid-connect/userinfo
 
 secret:
-  APP_KEYS: /4jSerC47WkxSnKE9yCrWQ==,o85yLhLDTCaFu46JfuznEA==,X1afbql/rn41EjHa6lV4XA==,G8aZu4meVzYJSWTlBJarLw==
-  API_TOKEN_SALT: 20tTEv8SIK8XAUhonHQr3g==
-  ADMIN_JWT_SECRET: JCDaGmGM5mr2GwNNOjF9kQ==
-  JWT_SECRET: Zec8t9+LrEBnWgnUqvKjZA==
-  DATABASE_NAME: racev-strapi
+  # for strapi
+  APP_KEYS: strapi-key
+  API_TOKEN_SALT: strapi-token-salt
+  ADMIN_JWT_SECRET: strapi-jwt-secret
+  JWT_SECRET: jwt-secret
+  DATABASE_NAME: my-strapi-db
   DATABASE_USERNAME: strapi
-  DATABASE_PASSWORD: maxwin8074
-  OIDC_CLIENT_SECRET: K2PjVBLXCLrvoAqgWfMoInnyf5y8f70L
+  DATABASE_PASSWORD: change-me
+  # for oidc
+  OIDC_CLIENT_SECRET: my-oidc-client-secret
 
 resources:
   requests:
@@ -59,15 +66,16 @@ resources:
   limits:
     cpu: 500m
     memory: 1Gi
-# probes:
-#   liveness:
-#     initialDelaySeconds: 60
-#     periodSeconds: 10
-#     timeoutSeconds: 5
-#     failureThreshold: 3
-#   readiness:
-#     initialDelaySeconds: 30
-#     periodSeconds: 10
-#     timeoutSeconds: 5
-#     successThreshold: 1
-#     failureThreshold: 3
+
+probes:
+  liveness:
+    initialDelaySeconds: 60
+    periodSeconds: 10
+    timeoutSeconds: 5
+    failureThreshold: 3
+  readiness:
+    initialDelaySeconds: 30
+    periodSeconds: 10
+    timeoutSeconds: 5
+    successThreshold: 1
+    failureThreshold: 3

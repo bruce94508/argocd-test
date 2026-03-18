@@ -1,0 +1,8 @@
+apiVersion: v2
+name: racev-strapi
+description: A Helm chart for deploy Strapi
+type: application
+
+version: 0.1.0
+
+appVersion: "1.18.0"

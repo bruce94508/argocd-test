@@ -9,6 +9,3 @@ helmCharts:
     releaseName: racev-strapi
     valuesFile: values.yaml
     namespace: apts-racev
-
-resources:
-  - http-racev-strapi.yaml
