@@ -1,0 +1,9 @@
+apiVersion: v2
+name: nfs-provisioner
+type: application
+version: 1.0.0
+description: NFS Provisioner wrapper chart
+dependencies:
+  - name: nfs-server-provisioner
+    version: 1.8.0
+    repository: https://kubernetes-sigs.github.io/nfs-ganesha-server-and-external-provisioner/
