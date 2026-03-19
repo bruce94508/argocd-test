@@ -70,8 +70,8 @@ data:
       rmdir "$LOCK_DIR"
       echo "編譯完成，釋放鎖定！"
 
-      # (Optional) 清理超過 5 天沒修改過的舊 build 快取，避免 PVC 爆滿
-      find /shared-data -maxdepth 1 -name "build_*" -type d -mtime +5 -exec rm -rf {} + 2>/dev/null || true
+      # (Optional) 清理超過 3 天沒修改過的舊 build 快取，避免 PVC 爆滿
+      find /shared-data -maxdepth 1 -name "build_*" -type d -mtime +3 -exec rm -rf {} + 2>/dev/null || true
     else
       echo "其他 Pod 正在執行編譯，進入等待模式..."
       # 每 3 秒檢查一次，等待搶到鎖的 Pod 完成並釋放

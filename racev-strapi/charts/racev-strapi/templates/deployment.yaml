@@ -21,7 +21,9 @@ spec:
         {{- toYaml . | nindent 8 }}
       {{- end }}
       annotations:
+        # 當 ConfigMap 或 Secret 內容變更時，Hash 會改變，Deployment 會自動重新部署
         checksum/config: {{ include (print $.Template.BasePath "/configmap.yaml") . | sha256sum }}
+        checksum/secret: {{ include (print $.Template.BasePath "/secret.yaml") . | sha256sum }}
     spec:
       {{- if .Values.persistence.buildCache.enabled }}
       # Init Container: 負責 Hash 比對與 npm run build，完成後 Main Container 才會啟動
