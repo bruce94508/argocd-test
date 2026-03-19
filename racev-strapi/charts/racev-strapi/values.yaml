@@ -64,6 +64,16 @@ secret:
   # for oidc
   OIDC_CLIENT_SECRET: my-oidc-client-secret
 
+# 專門給 Init Container 用的(用於 npm run build)
+initResources:
+  requests:
+    cpu: 500m
+    memory: 1Gi
+  limits:
+    cpu: 1000m
+    memory: 2Gi # Webpack 很吃記憶體，上限給高一點防 OOM
+
+# 給 Main Container 用的
 resources:
   requests:
     cpu: 250m

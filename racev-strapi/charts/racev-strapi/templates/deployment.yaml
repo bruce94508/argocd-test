@@ -44,6 +44,10 @@ spec:
               mountPath: /shared-data
             - name: build-script
               mountPath: /scripts
+          {{- with $.Values.initResources }}
+          resources:
+            {{- toYaml . | nindent 12 }}
+          {{- end }}
       {{- end }}
       containers:
         - name: strapi

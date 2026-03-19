@@ -56,13 +56,21 @@ secret:
   DATABASE_PASSWORD: strapi
   OIDC_CLIENT_SECRET: saJhknxLe2LvsTlXDwXO0ctRXgBInC47
 
+initResources:
+  requests:
+    cpu: 500m
+    memory: 1Gi
+  limits:
+    cpu: 1000m
+    memory: 2Gi
+
 resources:
   requests:
     cpu: 250m
     memory: 512Mi
   limits:
-    cpu: 1000m
-    memory: 2Gi
+    cpu: 500m
+    memory: 1Gi
 
 probes:
   startup:
