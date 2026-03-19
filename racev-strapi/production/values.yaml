@@ -41,7 +41,7 @@ config:
   STRAPI_ADMIN_OIDC_ENABLED: true
   STRAPI_ADMIN_OIDC_ISSUER: RACEV-OIDC
   OIDC_REDIRECT_URI: http://localhost:1337/strapi-plugin-sso/oidc/callback
-  OIDC_CLIENT_ID: racev-strapi-admin-oidc-test
+  OIDC_CLIENT_ID: racev-strapi-admin-oidc
   OIDC_AUTHORIZATION_ENDPOINT: http://10.40.1.105:8089/realms/racev/protocol/openid-connect/auth
   OIDC_TOKEN_ENDPOINT: http://10.40.1.105:8089/realms/racev/protocol/openid-connect/token
   OIDC_USER_INFO_ENDPOINT: http://10.40.1.105:8089/realms/racev/protocol/openid-connect/userinfo
