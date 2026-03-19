@@ -37,9 +37,9 @@ config:
   TZ: Asia/Taipei
   DATABASE_HOST: 10.40.1.105
   DATABASE_PORT: 3307
-  PUBLIC_URL: http://localhost:1337
+  PUBLIC_URL: http://localhost:13378
   STRAPI_ADMIN_OIDC_ENABLED: true
-  STRAPI_ADMIN_OIDC_ISSUER: RACEV-OIDC
+  STRAPI_ADMIN_OIDC_ISSUER: RACEV-OIDC-TEST
   OIDC_REDIRECT_URI: http://localhost:1337/strapi-plugin-sso/oidc/callback
   OIDC_CLIENT_ID: racev-strapi-admin-oidc
   OIDC_AUTHORIZATION_ENDPOINT: http://10.40.1.105:8089/realms/racev/protocol/openid-connect/auth
@@ -54,7 +54,7 @@ secret:
   DATABASE_NAME: racev-strapi
   DATABASE_USERNAME: strapi
   DATABASE_PASSWORD: strapi
-  OIDC_CLIENT_SECRET: saJhknxLe2LvsTlXDwXO0ctRXgBInC478
+  OIDC_CLIENT_SECRET: saJhknxLe2LvsTlXDwXO0ctRXgBInC47
 
 resources:
   requests:
