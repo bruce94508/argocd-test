@@ -39,6 +39,10 @@ spec:
                 name: {{ $.Release.Name }}-cm
             - secretRef:
                 name: {{ $.Release.Name }}-secret
+          env:
+            # 把 image tag 注入進來，讓 build hash 也包含版本資訊
+            - name: IMAGE_TAG
+              value: {{ .Values.image.tag | quote }}
           volumeMounts:
             - name: shared-build
               mountPath: /shared-data
@@ -58,7 +62,7 @@ spec:
           command: ["/bin/sh", "-c"]
           args:
             - |
-              CURRENT_ENV="${PUBLIC_URL}_${STRAPI_ADMIN_OIDC_ENABLED}_${STRAPI_ADMIN_OIDC_ISSUER}"
+              CURRENT_ENV="${PUBLIC_URL}_${STRAPI_ADMIN_OIDC_ENABLED}_${STRAPI_ADMIN_OIDC_ISSUER}_${IMAGE_TAG}"
               CURRENT_HASH=$(echo -n "$CURRENT_ENV" | md5sum | awk '{print $1}')
               echo "Linking build cache: build_${CURRENT_HASH}"
               rm -rf /var/maxwin/racev-strapi/build
@@ -78,6 +82,9 @@ spec:
                 name: {{ $.Release.Name }}-cm
             - secretRef:
                 name: {{ $.Release.Name }}-secret
+          env:
+            - name: IMAGE_TAG
+              value: {{ .Values.image.tag | quote }}
           {{- if .Values.probes }}
           {{- if .Values.probes.startup }}
           startupProbe:

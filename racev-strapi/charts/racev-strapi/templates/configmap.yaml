@@ -43,8 +43,8 @@ data:
     set -e
     echo "開始初始化檢查..."
 
-    # 只計算會影響前端 Build 結果的環境變數
-    CURRENT_ENV="${PUBLIC_URL}_${STRAPI_ADMIN_OIDC_ENABLED}_${STRAPI_ADMIN_OIDC_ISSUER}"
+    # 只計算會影響前端 Build 結果的環境變數（含 image 版本，避免升版後用到舊的 build 快取）
+    CURRENT_ENV="${PUBLIC_URL}_${STRAPI_ADMIN_OIDC_ENABLED}_${STRAPI_ADMIN_OIDC_ISSUER}_${IMAGE_TAG}"
     CURRENT_HASH=$(echo -n "$CURRENT_ENV" | md5sum | awk '{print $1}')
 
     BUILD_DEST="/shared-data/build_${CURRENT_HASH}"
