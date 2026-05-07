@@ -13,9 +13,9 @@ configMapGenerator:
     literals:
       - N8N_PATH=/n8n/
       - N8N_SECURE_COOKIE=false
-      - WEBHOOK_URL=http://10.40.1.105:30080/n8n/
-      - N8N_HOST=10.40.1.105
-      - N8N_EDITOR_BASE_URL=http://10.40.1.105:30080/n8n/
+      - WEBHOOK_URL=http://127.0.0.1:51003/n8n/
+      - N8N_HOST=127.0.0.1
+      - N8N_EDITOR_BASE_URL=http://127.0.0.1:51003/n8n/
       - EXTERNAL_HOOK_FILES=
       - OIDC_FORWARD_ACCESS_HEADER=
 
