@@ -96,6 +96,8 @@ metadata:
 config:
   replace:
     uri: /$(uri_captures[1])
+    # headers:
+    #   - "x-forwarded-host: 10.40.1.105:30080"
     headers:
-      - "x-forwarded-host: 10.40.1.105:30080"
+      - "origin: http://127.0.0.1"
 plugin: request-transformer
