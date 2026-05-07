@@ -1,0 +1,105 @@
+# ==============================================================================
+# Kong Gateway API Routes for n8n - Test (no Keycloak/OIDC)
+#
+# Test Goal:
+#   Verify Kong request-transformer plugin behavior for
+#   "x-forwarded-host: 10.40.1.105:30080" header replacement
+#
+# Routes:
+#   1. n8n-test        -> PathPrefix /n8n  (main route, strip-path)
+#   2. n8n-assets-test -> RegExp /n8n/(assets|rest|...)  (asset route, x-forwarded-host injection)
+# ==============================================================================
+
+---
+# ReferenceGrant: allow HTTPRoute in kong ns to reference Service in n8n ns
+apiVersion: gateway.networking.k8s.io/v1beta1
+kind: ReferenceGrant
+metadata:
+  name: n8n-test-grant
+  namespace: n8n
+spec:
+  from:
+    - group: gateway.networking.k8s.io
+      kind: HTTPRoute
+      namespace: n8n
+  to:
+    - group: ""
+      kind: Service
+
+---
+# HTTPRoute 1: main route
+# - match PathPrefix /n8n
+# - strip-path: true (strip /n8n prefix before forwarding to n8n service)
+# - no auth plugin (test env)
+apiVersion: gateway.networking.k8s.io/v1
+kind: HTTPRoute
+metadata:
+  name: n8n-test
+  namespace: n8n
+  annotations:
+    konghq.com/strip-path: "true"
+spec:
+  parentRefs:
+    - name: kong
+      namespace: kong
+  hostnames:
+    - "10.40.1.105"
+  rules:
+    - matches:
+        - path:
+            type: PathPrefix
+            value: /n8n
+      backendRefs:
+        - name: n8n
+          kind: Service
+          port: 5678
+          namespace: n8n
+
+---
+# HTTPRoute 2: asset route (assets / rest / icons etc.)
+# - RegExp match, excludes /n8n/rest/logout
+# - attaches n8n-strip-test plugin:
+#     * strip /n8n prefix (uri rewrite)
+#     * inject x-forwarded-host header (test target)
+apiVersion: gateway.networking.k8s.io/v1
+kind: HTTPRoute
+metadata:
+  name: n8n-assets-test
+  namespace: n8n
+  annotations:
+    konghq.com/strip-path: "false"
+    konghq.com/plugins: n8n-strip-test
+spec:
+  parentRefs:
+    - name: kong
+      namespace: kong
+  hostnames:
+    - "10.40.1.105"
+  rules:
+    - matches:
+        - path:
+            type: RegularExpression
+            value: /n8n/((?:assets|static|favicon|rest|icons|types)(?!/logout).*)
+      backendRefs:
+        - name: n8n
+          kind: Service
+          port: 5678
+          namespace: n8n
+
+---
+# KongPlugin: request-transformer
+# Test targets:
+#   1. uri rewrite: /n8n/(capture) -> /(capture), strip /n8n prefix
+#   2. replace header x-forwarded-host -> 10.40.1.105:30080
+#      so n8n recognizes correct host:port, avoiding Origin header validation failure
+apiVersion: configuration.konghq.com/v1
+kind: KongPlugin
+metadata:
+  name: n8n-strip-test
+  namespace: n8n
+config:
+  replace:
+    uri: /$(uri_captures[1])
+    headers:
+      - "x-forwarded-host: 10.40.1.105:30080"
+plugin: request-transformer

@@ -1,0 +1,102 @@
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+
+resources:
+  - "../n8n/bases"
+  - "kong-routes.yaml"
+
+namespace: n8n
+
+configMapGenerator:
+  - name: n8n-cm
+    behavior: merge
+    literals:
+      - N8N_PATH=/n8n/
+      - N8N_SECURE_COOKIE=false
+      - WEBHOOK_URL=http://10.40.1.105:30080/n8n/
+      - N8N_HOST=10.40.1.105
+      - N8N_EDITOR_BASE_URL=http://10.40.1.105:30080/n8n/
+      - EXTERNAL_HOOK_FILES=
+      - OIDC_FORWARD_ACCESS_HEADER=
+
+  - name: n8n-hooks
+    literals:
+      - hooks.js=module.exports = {}
+
+secretGenerator:
+  - name: n8n-postgres-secret
+    behavior: merge
+    literals:
+      - POSTGRES_USER=root
+      - POSTGRES_PASSWORD=testpassword
+      - POSTGRES_NON_ROOT_USER=n8nUser
+      - POSTGRES_NON_ROOT_PASSWORD=testpassword
+
+generatorOptions:
+  disableNameSuffixHash: true
+
+images:
+  - name: n8nio/n8n
+    newTag: 1.121.3
+
+patches:
+  - patch: |-
+      apiVersion: apps/v1
+      kind: Deployment
+      metadata:
+        name: n8n
+      spec:
+        template:
+          spec:
+            containers:
+              - name: n8n
+                resources:
+                  requests:
+                    cpu: "250m"
+                    memory: 256Mi
+                  limits:
+                    cpu: "1"
+                    memory: "1Gi"
+                volumeMounts:
+                  - mountPath: /home/node/.n8n
+                    name: n8n-data
+
+  - patch: |-
+      apiVersion: apps/v1
+      kind: Deployment
+      metadata:
+        name: n8n-postgres
+      spec:
+        template:
+          spec:
+            containers:
+              - name: postgres
+                resources:
+                  requests:
+                    cpu: "250m"
+                    memory: 256Mi
+                  limits:
+                    cpu: "1"
+                    memory: "1Gi"
+
+  - patch: |-
+      apiVersion: v1
+      kind: PersistentVolumeClaim
+      metadata:
+        name: n8n-pvc
+      spec:
+        storageClassName: hostpath
+        resources:
+          requests:
+            storage: 500Mi
+
+  - patch: |-
+      apiVersion: v1
+      kind: PersistentVolumeClaim
+      metadata:
+        name: n8n-postgres-pvc
+      spec:
+        storageClassName: hostpath
+        resources:
+          requests:
+            storage: 1Gi
