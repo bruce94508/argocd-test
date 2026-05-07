@@ -42,8 +42,6 @@ spec:
   parentRefs:
     - name: kong
       namespace: kong
-  hostnames:
-    - "10.40.1.105"
   rules:
     - matches:
         - path:
@@ -73,8 +71,6 @@ spec:
   parentRefs:
     - name: kong
       namespace: kong
-  hostnames:
-    - "10.40.1.105"
   rules:
     - matches:
         - path:
