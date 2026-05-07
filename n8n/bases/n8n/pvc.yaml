@@ -3,7 +3,7 @@ kind: PersistentVolumeClaim
 metadata:
   name: n8n-pvc
 spec:
-  storageClassName: hostpath
+  storageClassName: standard
   accessModes:
     - ReadWriteOnce
   resources:

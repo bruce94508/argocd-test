@@ -62,14 +62,3 @@ patches:
         resources:
           requests:
             storage: 500Mi
-
-  - patch: |-
-      apiVersion: v1
-      kind: PersistentVolumeClaim
-      metadata:
-        name: n8n-postgres-pvc
-      spec:
-        storageClassName: standard
-        resources:
-          requests:
-            storage: 1Gi
