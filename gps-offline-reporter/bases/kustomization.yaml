@@ -1,0 +1,17 @@
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+resources:
+  - "./cronjob.yaml"
+
+configMapGenerator:
+  - name: gps-offline-reporter-cm
+    envs:
+      - ".env.example"
+
+
+generatorOptions:
+  disableNameSuffixHash: true
+
+commonLabels:
+  app.maxwin/name: gps-offline-reporter
+  app.maxwin/component: backend

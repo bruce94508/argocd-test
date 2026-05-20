@@ -1,0 +1,26 @@
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+resources:
+  - "../bases"
+
+configMapGenerator:
+  - name: gps-offline-reporter-cm
+    behavior: merge
+    envs:
+      - ".env"
+
+generatorOptions:
+  disableNameSuffixHash: true
+
+namespace: apts-racev
+
+commonLabels:
+  app.maxwin/name: gps-offline-reporter
+  app.maxwin/component: backend
+
+images:
+  - name: cicd-so-happy.maxwin.com.tw:5000/gps-offline-reporter
+    newTag: 1.0.0
+
+patches:
+  - path: cronjob.yaml

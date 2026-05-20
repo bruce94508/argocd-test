@@ -1,0 +1,28 @@
+apiVersion: batch/v1
+kind: CronJob
+metadata:
+  name: gps-offline-reporter
+spec:
+  timeZone: "Asia/Taipei"
+  schedule: "0 3 * * *" # default: UTC, set timeZone for local time
+  concurrencyPolicy: Replace
+  startingDeadlineSeconds: 300 # 5 mins
+  jobTemplate:
+    spec:
+      template:
+        spec:
+          containers:
+            - name: gps-offline-reporter
+              image: cicd-so-happy.maxwin.com.tw:5000/gps-offline-reporter:1.0.0
+              imagePullPolicy: IfNotPresent
+              envFrom:
+                - configMapRef:
+                    name: gps-offline-reporter-cm
+              resources:
+                requests:
+                  cpu: 128m
+                  memory: 256Mi
+                limits:
+                  cpu: 256m
+                  memory: 512Mi
+          restartPolicy: Never
