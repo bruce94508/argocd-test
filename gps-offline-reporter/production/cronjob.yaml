@@ -4,7 +4,7 @@ metadata:
   name: gps-offline-reporter
 spec:
   # schedule: "0 3 * * *" # default: UTC, set timeZone for local time
-  schedule: "* * * * *" # default: UTC, set timeZone for local time
+  schedule: "30 13 * * *" # default: UTC, set timeZone for local time
   startingDeadlineSeconds: 21600 # 6 hours
   jobTemplate:
     spec:
