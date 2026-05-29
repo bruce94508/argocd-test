@@ -1,0 +1,51 @@
+{{- range .Values.jobs }}
+apiVersion: batch/v1
+kind: CronJob
+metadata:
+  name: {{ $.Release.Name }}-{{ .name }}
+  namespace: {{ $.Release.Namespace }}
+  labels:
+{{- range $key, $value := $.Values.commonLabels }}
+    {{ $key }}: {{ $value | quote }}
+{{- end }}
+spec:
+  timeZone: "Asia/Taipei"
+  schedule: {{ .schedule | quote }}
+  startingDeadlineSeconds: 300
+  concurrencyPolicy: Replace
+  jobTemplate:
+    metadata:
+      labels:
+{{- range $key, $value := $.Values.commonLabels }}
+        {{ $key }}: {{ $value | quote }}
+{{- end }}
+    spec:
+      backoffLimit: 3  # 失敗後最多重試限制次數
+      template:
+        metadata:
+          labels:
+{{- range $key, $value := $.Values.commonLabels }}
+            {{ $key }}: {{ $value | quote }}
+{{- end }}
+        spec:
+          containers:
+            - name: main
+              image: "{{ $.Values.image.repository }}:{{ $.Values.image.tag }}"
+              imagePullPolicy: {{ $.Values.image.pullPolicy }}
+              envFrom:
+                # 引用個別任務專屬的 Secret
+                - secretRef:
+                    name: {{ $.Release.Name }}-secret-{{ .name }}
+                # 引用個別任務專屬的 ConfigMap
+                - configMapRef:
+                    name: {{ $.Release.Name }}-cm-{{ .name }}
+              resources:
+                requests:
+                  cpu: 128m
+                  memory: 256Mi
+                limits:
+                  cpu: 256m
+                  memory: 512Mi
+          restartPolicy: Never
+---
+{{- end }}

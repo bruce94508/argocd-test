@@ -1,0 +1,53 @@
+# image
+image:
+  repository: cicd-so-happy.maxwin.com.tw:5000/daily-error-report
+  pullPolicy: IfNotPresent
+  tag: "1.0.0"
+
+# commonConfig: 基礎變數（以 13 資料庫為 common 基準）
+commonConfig:
+  TZ: "Asia/Taipei"
+  DRY_RUN: "false"
+  SMTP_SERVER: "192.168.160.125"
+  SENDER_EMAIL: "report@racev.com"
+  DB_SERVER: "192.168.192.13"
+  DB_NAME: "RAC_Bus"
+  DB_USER: "rac_dvp"
+
+# commonSecret
+commonSecret:
+  DB_PASSWORD: "rac1863"
+
+# jobs: 分別設定個別的排程時間、連線細節與收件人名單
+jobs:
+  - name: anomaly-report
+    schedule: "0 8 * * *"
+    jobType: "ANOMALY_REPORT"
+    # Anomaly 使用 140 資料庫與特定收件人群組
+    extraConfig:
+      DB_SERVER: "192.168.186.140"
+      DB_USER: "rac_dev"
+      RECEIVER_EMAIL: "bruce.lee@racev.com"
+      CC_EMAIL: ""
+      # RECEIVER_EMAIL: "EBUS-Status-Reporting-Group@racev.com,yingjung.li@racev.com,elvis.yang@racev.com,kim.tsai@racev.com,edward.shiung@racev.com,roger.cheng@racev.com"
+      # CC_EMAIL: "eric@racev.com,kai.chang@racev.com,kiki.huang@racev.com,boxiang.huang@racev.com"
+    extraSecret:
+      DB_PASSWORD: "rac9308"
+
+  - name: send-200-data
+    schedule: "0 8 * * *"
+    jobType: "SEND_200_DATA"
+    extraConfig:
+      RECEIVER_EMAIL: "bruce.lee@racev.com"
+      CC_EMAIL: ""
+      # RECEIVER_EMAIL: "kevin.hsu@racev.com,eric@racev.com,ht.chuang@racev.com,harry.chang@racev.com,dustin.shiu@racev.com,elvis.yang@racev.com,roger.cheng@racev.com,max.lee@racev.com,cathy.feng@racev.com,lon.yang@racev.com"
+      # CC_EMAIL: "kai.chang@racev.com,kiki.huang@racev.com"
+
+  - name: send-qisda-version
+    schedule: "0 9 * * 1"
+    jobType: "SEND_QISDA_VERSION"
+    extraConfig:
+      RECEIVER_EMAIL: "bruce.lee@racev.com"
+      CC_EMAIL: ""
+      # RECEIVER_EMAIL: "wilson.shi@racev.com,winfred.deng@racev.com"
+      # CC_EMAIL: "kai.chang@racev.com"
