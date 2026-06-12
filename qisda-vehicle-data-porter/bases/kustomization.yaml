@@ -1,0 +1,21 @@
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+resources:
+  - "./cronjob.yaml"
+
+configMapGenerator:
+  - name: qisda-vehicle-data-porter-cm
+    envs:
+      - ".env.example"
+
+# secretGenerator:
+#   - name: qisda-vehicle-data-porter-secret
+#     envs:
+#       - "secret.env.example"
+
+generatorOptions:
+  disableNameSuffixHash: true
+
+commonLabels:
+  app.maxwin/name: qisda-vehicle-data-porter
+  app.maxwin/component: backend

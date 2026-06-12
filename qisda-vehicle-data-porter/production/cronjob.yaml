@@ -1,0 +1,18 @@
+apiVersion: batch/v1
+kind: CronJob
+metadata:
+  name: qisda-vehicle-data-porter
+spec:
+  jobTemplate:
+    spec:
+      template:
+        spec:
+          containers:
+            - name: qisda-vehicle-data-porter
+              resources:
+                requests:
+                  cpu: 128m
+                  memory: 256Mi
+                limits:
+                  cpu: 256m
+                  memory: 512Mi

@@ -1,0 +1,23 @@
+apiVersion: batch/v1
+kind: CronJob
+metadata:
+  name: qisda-vehicle-data-porter
+spec:
+  schedule: "* * * * *"
+  startingDeadlineSeconds: 50
+  concurrencyPolicy: Forbid
+  jobTemplate:
+    spec:
+      activeDeadlineSeconds: 90
+      template:
+        spec:
+          containers:
+            - name: qisda-vehicle-data-porter
+              image: cicd-so-happy.maxwin.com.tw:5000/qisda-vehicle-data-porter:1.0.0
+              imagePullPolicy: IfNotPresent
+              envFrom:
+                - configMapRef:
+                    name: qisda-vehicle-data-porter-cm
+                - secretRef:
+                    name: qisda-vehicle-data-porter-secret
+          restartPolicy: OnFailure
