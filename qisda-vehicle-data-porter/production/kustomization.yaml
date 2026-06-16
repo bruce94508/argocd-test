@@ -27,7 +27,7 @@ namespace: apts-racev
 
 images:
   - name: cicd-so-happy.maxwin.com.tw:5000/qisda-vehicle-data-porter
-    newTag: 1.0.1
+    newTag: 1.0.2
 
 patches:
   - path: cronjob.yaml
