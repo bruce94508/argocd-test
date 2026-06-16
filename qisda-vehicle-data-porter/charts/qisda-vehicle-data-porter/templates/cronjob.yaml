@@ -12,7 +12,7 @@ spec:
   timeZone: {{ .timeZone | default "Asia/Taipei" }}
   schedule: {{ .schedule | quote }}
   startingDeadlineSeconds: {{ .startingDeadlineSeconds | default 50 }}
-  concurrencyPolicy: {{ .concurrencyPolicy | default "Forbid" }}
+  concurrencyPolicy: {{ .concurrencyPolicy | default "Replace" }}
   jobTemplate:
     spec:
       activeDeadlineSeconds: {{ .activeDeadlineSeconds | default 50 }}
@@ -36,6 +36,6 @@ spec:
               resources:
                 {{- toYaml . | nindent 16 }}
               {{- end }}
-          restartPolicy: OnFailure
+          restartPolicy: Never
 ---
 {{- end }}

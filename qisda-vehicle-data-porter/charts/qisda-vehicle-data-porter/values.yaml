@@ -24,7 +24,7 @@ targets:
     timeZone: Asia/Taipei
     activeDeadlineSeconds: 50
     startingDeadlineSeconds: 50
-    concurrencyPolicy: Forbid
+    concurrencyPolicy: Replace
     # 局部覆蓋的 config 變數 (merge)
     extraConfig:
       DB_SERVER: 127.0.0.1

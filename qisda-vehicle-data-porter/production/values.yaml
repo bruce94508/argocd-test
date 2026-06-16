@@ -28,7 +28,7 @@ targets:
   - name: db-local
     schedule: "* * * * *"
     timeZone: Asia/Taipei
-    concurrencyPolicy: Forbid
+    concurrencyPolicy: Replace
     extraConfig:
       DB_SERVER: 10.40.1.105
       DB_PORT: "1438"
