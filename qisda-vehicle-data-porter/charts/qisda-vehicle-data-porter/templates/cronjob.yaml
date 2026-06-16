@@ -1,0 +1,41 @@
+{{- range .Values.targets }}
+apiVersion: batch/v1
+kind: CronJob
+metadata:
+  name: {{ $.Release.Name }}-{{ .name | kebabcase }}
+  namespace: {{ $.Release.Namespace }}
+  {{- with $.Values.labels }}
+  labels:
+    {{- toYaml . | nindent 4 }}
+  {{- end }}
+spec:
+  timeZone: {{ .timeZone | default "Asia/Taipei" }}
+  schedule: {{ .schedule | quote }}
+  startingDeadlineSeconds: {{ .startingDeadlineSeconds | default 50 }}
+  concurrencyPolicy: {{ .concurrencyPolicy | default "Forbid" }}
+  jobTemplate:
+    spec:
+      activeDeadlineSeconds: {{ .activeDeadlineSeconds | default 50 }}
+      template:
+        metadata:
+          {{- with $.Values.labels }}
+          labels:
+            {{- toYaml . | nindent 12 }}
+          {{- end }}
+        spec:
+          containers:
+            - name: {{ $.Release.Name }}-{{ .name | kebabcase }}
+              image: "{{ $.Values.image.repository }}:{{ $.Values.image.tag }}"
+              imagePullPolicy: {{ $.Values.image.pullPolicy }}
+              envFrom:
+                - secretRef:
+                    name: {{ $.Release.Name }}-{{ .name | kebabcase }}-secret
+                - configMapRef:
+                    name: {{ $.Release.Name }}-{{ .name | kebabcase }}-cm
+              {{- with .resources | default $.Values.resources }}
+              resources:
+                {{- toYaml . | nindent 16 }}
+              {{- end }}
+          restartPolicy: OnFailure
+---
+{{- end }}

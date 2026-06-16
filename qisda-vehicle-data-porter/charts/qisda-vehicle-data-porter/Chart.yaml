@@ -1,0 +1,6 @@
+apiVersion: v2
+name: qisda-vehicle-data-porter
+description: Helm chart for qisda-vehicle-data-porter CronJobs
+type: application
+version: 0.1.0
+appVersion: 1.0.0

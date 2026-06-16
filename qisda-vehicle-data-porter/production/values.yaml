@@ -1,0 +1,38 @@
+image:
+  repository: cicd-so-happy.maxwin.com.tw:5000/qisda-vehicle-data-porter
+  pullPolicy: IfNotPresent
+  tag: 1.0.0
+
+resources: {}
+
+labels:
+  app.maxwin/component: backend
+  app.maxwin/name: qisda-vehicle-data-porter
+
+# 全域ConfigMap配置
+config:
+  DB_SERVER: test
+  DB_PORT: "test"
+  DB_DATABASE: test
+  DRY_RUN: "false"
+  TZ: Asia/Taipei
+
+# 全域Secret配置
+secret:
+  DB_USER: test
+  DB_PASSWORD: test
+  MONGO_URI: mongodb://SaturnDB:QisdaBenQ@192.168.186.147/saturn?authMechanism=SCRAM-SHA-1
+
+targets:
+  # 測試使用
+  - name: db-local
+    schedule: "* * * * *"
+    timeZone: Asia/Taipei
+    concurrencyPolicy: Forbid
+    extraConfig:
+      DB_SERVER: 10.40.1.105
+      DB_PORT: "1438"
+      DB_DATABASE: RAC_Bus
+    extraSecret:
+      DB_USER: sa
+      DB_PASSWORD: YourStrong@Pass123

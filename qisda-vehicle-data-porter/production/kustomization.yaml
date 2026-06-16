@@ -1,33 +1,11 @@
 apiVersion: kustomize.config.k8s.io/v1beta1
 kind: Kustomization
-resources:
-  - "../bases"
 
-# 覆寫生產/測試環境的 Secret，從本地的 .env 讀取真實帳密資訊（該檔案已被 .gitignore 忽略，不會被推上 Git）
-# secretGenerator:
-#   - name: qisda-vehicle-data-porter-secret
-#     behavior: replace
-#     envs:
-#       - .env
+helmGlobals:
+  chartHome: ../charts
 
-generatorOptions:
-  disableNameSuffixHash: true
-
-configMapGenerator:
-  - name: qisda-vehicle-data-porter-cm
-    behavior: replace
-    literals:
-      - DB_SERVER=10.40.1.105
-      - DB_PORT=1438
-      - DB_DATABASE=RAC_Bus
-      - DRY_RUN=false
-      - TZ=Asia/Taipei
-
-namespace: apts-racev
-
-images:
-  - name: cicd-so-happy.maxwin.com.tw:5000/qisda-vehicle-data-porter
-    newTag: 1.0.2
-
-patches:
-  - path: cronjob.yaml
+helmCharts:
+  - name: qisda-vehicle-data-porter
+    releaseName: qisda-vehicle-data-porter
+    valuesFile: values.yaml
+    namespace: apts-racev

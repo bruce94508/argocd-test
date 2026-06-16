@@ -1,0 +1,35 @@
+image:
+  repository: cicd-so-happy.maxwin.com.tw:5000/qisda-vehicle-data-porter
+  pullPolicy: IfNotPresent
+  tag: 1.0.0
+
+resources: {}
+
+labels:
+  app.maxwin/component: backend
+  app.maxwin/name: qisda-vehicle-data-porter
+
+config:
+  DRY_RUN: "true"
+  TZ: Asia/Taipei
+
+secret:
+  DB_USER: sa
+  DB_PASSWORD: your_password_here
+  MONGO_URI: mongodb://user:pass@host/database
+
+targets:
+  - name: db-1
+    schedule: "* * * * *"
+    timeZone: Asia/Taipei
+    activeDeadlineSeconds: 50
+    startingDeadlineSeconds: 50
+    concurrencyPolicy: Forbid
+    # 局部覆蓋的 config 變數 (merge)
+    extraConfig:
+      DB_SERVER: 127.0.0.1
+      DB_PORT: "1433"
+      DB_DATABASE: RAC_Bus
+    # 局部覆蓋的 secret 變數 (merge)
+    extraSecret:
+      DB_PASSWORD: your_overridden_password_here

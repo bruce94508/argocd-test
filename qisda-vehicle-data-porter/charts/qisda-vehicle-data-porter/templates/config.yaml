@@ -1,0 +1,19 @@
+{{- range .Values.targets }}
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ $.Release.Name }}-{{ .name | kebabcase }}-cm
+  namespace: {{ $.Release.Namespace }}
+  {{- with $.Values.labels }}
+  labels:
+    {{- toYaml . | nindent 4 }}
+  {{- end }}
+data:
+  {{- $globalConfig := $.Values.config | default dict }}
+  {{- $localConfig := .extraConfig | default dict }}
+  {{- $mergedConfig := merge (deepCopy $localConfig) $globalConfig }}
+  {{- range $key, $value := $mergedConfig }}
+  {{ $key }}: {{ $value | quote }}
+  {{- end }}
+---
+{{- end }}
