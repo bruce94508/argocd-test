@@ -1,0 +1,55 @@
+image:
+  repository: cicd-so-happy.maxwin.com.tw:5000/adas-upload-reporter
+  pullPolicy: IfNotPresent
+  tag: 1.0.1
+
+resources: {}
+
+labels:
+  app.maxwin/component: backend
+  app.maxwin/name: adas-upload-reporter
+
+# 生產環境全域 ConfigMap 配置
+config:
+  DRY_RUN: "false"
+  TZ: Asia/Taipei
+  SMTP_SERVER: "192.168.160.125"
+  SENDER_EMAIL: "report@racev.com"
+  DEFAULT_EMAIL: "bruce.lee@racev.com"
+  CC_EMAIL: "bruce.lee@racev.com"
+  DB_SERVER: "192.168.192.13"
+  DB_NAME: "RAC_Bus"
+  STRAPI_API: "http://10.40.201.251:30080/racev-strapi/api/tbox-tasks"
+  OUTPUT_DIR: "/app/results"
+
+persistence:
+  enabled: true
+  storageClass: "longhorn"
+  accessMode: ReadWriteOnce
+  size: 500Mi
+  mountPath: /app/results
+
+# 生產環境全域 Secret 配置
+secret:
+  DB_USER: "rac_dvp"
+  DB_PASSWORD: "rac1863"
+  STRAPI_TOKEN: "f4d672ab33357a6f1032ef0e2c342894663beebb45a1c19208e8ed448548232254f09af02fbb8a3ee0f84425840349842105933d8c8e20893199af169a7108032296ddd9fdfc937a2d434c30b628907323a1a5535d6e8ca4577f47f6308ebc8c2a3b2b62c24c6e08d8e0fc10b325431d9435d68d5ba11e14df803b9262022782"
+  # 生產環境
+  COMPANY_CONFIG_JSON: '{"東南客運":{"method":"EMAIL","email":"bruce.lee@racev.com"},"欣欣客運-台北":{"method":"FTP","host":"10.40.1.105","port":21,"username":"FTPuser1","password":"ftp123456789","remote_path":"/ftp/FTPuser1"}}'
+  # COMPANY_CONFIG_JSON: '{"東南客運":{"method":"EMAIL","email":"selai@southeastbus.com"},"欣欣客運-台北":{"method":"FTP","host":"61.216.177.217","port":21,"username":"RAC","password":"5407","remote_path":"/test"}}'
+
+targets:
+  - name: tdx
+    # schedule: "30 7 * * *"
+    schedule: "48 16 * * *"
+    timeZone: Asia/Taipei
+    concurrencyPolicy: Replace
+    extraConfig:
+      JOB_TYPE: TDX
+  - name: report
+    # schedule: "0 16 * * *"
+    schedule: "50 16 * * *"
+    timeZone: Asia/Taipei
+    concurrencyPolicy: Replace
+    extraConfig:
+      JOB_TYPE: report

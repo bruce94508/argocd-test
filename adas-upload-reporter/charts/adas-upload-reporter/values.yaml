@@ -1,0 +1,53 @@
+image:
+  repository: cicd-so-happy.maxwin.com.tw:5000/adas-upload-reporter
+  pullPolicy: IfNotPresent
+  tag: 1.0.0
+
+resources: {}
+
+labels:
+  app.maxwin/component: backend
+  app.maxwin/name: adas-upload-reporter
+
+config:
+  DRY_RUN: "true"
+  TZ: Asia/Taipei
+  SMTP_SERVER: ""
+  SENDER_EMAIL: ""
+  DEFAULT_EMAIL: ""
+  CC_EMAIL: ""
+  DB_SERVER: ""
+  DB_NAME: ""
+  STRAPI_API: ""
+  OUTPUT_DIR: "/app/results"
+
+persistence:
+  enabled: true
+  storageClass: "longhorn"
+  accessMode: ReadWriteOnce
+  size: 1Gi
+  mountPath: /app/results
+
+secret:
+  DB_USER: ""
+  DB_PASSWORD: ""
+  STRAPI_TOKEN: ""
+  COMPANY_CONFIG_JSON: ""
+
+targets:
+  - name: tdx
+    schedule: "30 7 * * *"
+    timeZone: Asia/Taipei
+    activeDeadlineSeconds: 3600
+    startingDeadlineSeconds: 200
+    concurrencyPolicy: Replace
+    extraConfig:
+      JOB_TYPE: TDX
+  - name: report
+    schedule: "0 16 * * *"
+    timeZone: Asia/Taipei
+    activeDeadlineSeconds: 3600
+    startingDeadlineSeconds: 200
+    concurrencyPolicy: Replace
+    extraConfig:
+      JOB_TYPE: report
