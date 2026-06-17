@@ -24,7 +24,7 @@ config:
 
 persistence:
   enabled: true
-  storageClass: "longhorn"
+  storageClass: "standard"
   accessMode: ReadWriteOnce
   size: 500Mi
   mountPath: /app/results
@@ -41,14 +41,14 @@ secret:
 targets:
   - name: tdx
     # schedule: "30 7 * * *"
-    schedule: "21 17 * * *"
+    schedule: "28 17 * * *"
     timeZone: Asia/Taipei
     concurrencyPolicy: Replace
     extraConfig:
       JOB_TYPE: TDX
   - name: report
     # schedule: "0 16 * * *"
-    schedule: "23 17 * * *"
+    schedule: "29 17 * * *"
     timeZone: Asia/Taipei
     concurrencyPolicy: Replace
     extraConfig:
