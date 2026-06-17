@@ -41,14 +41,14 @@ secret:
 targets:
   - name: tdx
     # schedule: "30 7 * * *"
-    schedule: "12 17 * * *"
+    schedule: "21 17 * * *"
     timeZone: Asia/Taipei
     concurrencyPolicy: Replace
     extraConfig:
       JOB_TYPE: TDX
   - name: report
     # schedule: "0 16 * * *"
-    schedule: "14 17 * * *"
+    schedule: "23 17 * * *"
     timeZone: Asia/Taipei
     concurrencyPolicy: Replace
     extraConfig:
