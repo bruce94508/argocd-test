@@ -8,6 +8,7 @@ defaultSettings:
 
 persistence:
   defaultClass: true # 將 Longhorn 設為預設的 StorageClass
+  defaultClassReplicaCount: 1 # 確保預設 StorageClass 建立的 Volume 副本數為 1
 
 preUpgradeChecker:
   jobEnabled: false
