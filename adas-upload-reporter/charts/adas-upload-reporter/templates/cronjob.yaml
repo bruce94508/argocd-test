@@ -15,7 +15,6 @@ spec:
   concurrencyPolicy: {{ .concurrencyPolicy | default "Replace" }}
   jobTemplate:
     spec:
-      activeDeadlineSeconds: {{ .activeDeadlineSeconds | default 50 }}
       template:
         metadata:
           {{- with $.Values.labels }}
