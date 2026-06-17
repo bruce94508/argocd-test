@@ -38,14 +38,14 @@ targets:
   - name: tdx
     schedule: "30 7 * * *"
     timeZone: Asia/Taipei
-    startingDeadlineSeconds: 200
+    startingDeadlineSeconds: 600
     concurrencyPolicy: Replace
     extraConfig:
       JOB_TYPE: TDX
   - name: report
     schedule: "0 16 * * *"
     timeZone: Asia/Taipei
-    startingDeadlineSeconds: 200
+    startingDeadlineSeconds: 600
     concurrencyPolicy: Replace
     extraConfig:
       JOB_TYPE: report

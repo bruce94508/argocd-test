@@ -11,7 +11,7 @@ metadata:
 spec:
   timeZone: {{ .timeZone | default "Asia/Taipei" }}
   schedule: {{ .schedule | quote }}
-  startingDeadlineSeconds: {{ .startingDeadlineSeconds | default 50 }}
+  startingDeadlineSeconds: {{ .startingDeadlineSeconds | default 600 }}
   concurrencyPolicy: {{ .concurrencyPolicy | default "Replace" }}
   jobTemplate:
     spec:
