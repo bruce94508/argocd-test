@@ -21,7 +21,7 @@ commonSecret:
 # jobs: 分別設定個別的排程時間、連線細節與收件人名單
 jobs:
   - name: anomaly-report
-    schedule: "0 15 * * *"
+    schedule: "6 15 * * *"
     jobType: "ANOMALY_REPORT"
     # Anomaly 使用 140 資料庫與特定收件人群組
     extraConfig:
@@ -35,7 +35,7 @@ jobs:
       DB_PASSWORD: "rac9308"
 
   - name: send-200-data
-    schedule: "0 15 * * *"
+    schedule: "7 15 * * *"
     jobType: "SEND_200_DATA"
     extraConfig:
       RECEIVER_EMAIL: "bruce.lee@racev.com"
@@ -44,7 +44,7 @@ jobs:
       # CC_EMAIL: "kai.chang@racev.com,kiki.huang@racev.com"
 
   - name: send-qisda-version
-    schedule: "0 15 * * *"
+    schedule: "8 15 * * *"
     jobType: "SEND_QISDA_VERSION"
     extraConfig:
       RECEIVER_EMAIL: "bruce.lee@racev.com"
