@@ -21,6 +21,7 @@ config:
   STRAPI_API: ""
   OUTPUT_DIR: "/app/results"
 
+# 因TDX腳本會先於7:30執行並產出excel檔案，以供report腳本在16:00運行使用，故需掛載 PersistentVolumeClaim來共用檔案，mountPath需和.env設定的OUTPUT_DIR相同
 persistence:
   enabled: true
   storageClass: "longhorn"
