@@ -7,7 +7,7 @@ image:
 # commonConfig: 基礎變數（以 13 資料庫為 common 基準）
 commonConfig:
   TZ: "Asia/Taipei"
-  DRY_RUN: "false"
+  DRY_RUN: "true"
   SMTP_SERVER: "192.168.160.125"
   SENDER_EMAIL: "report@racev.com"
   DB_SERVER: "192.168.192.13"
