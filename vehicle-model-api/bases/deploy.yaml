@@ -1,0 +1,36 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: vehicle-model-api
+spec:
+  replicas: 1
+  selector: {}
+  template:
+    spec:
+      containers:
+        - name: vehicle-model-api
+          image: cicd-so-happy.maxwin.com.tw:5000/vehicle-model-api:1.0.0
+          resources:
+            limits:
+              memory: "128Mi"
+              cpu: "128m"
+          ports:
+            - containerPort: 5000
+              name: http
+          livenessProbe:
+            httpGet:
+              path: /health
+              port: 5000
+            initialDelaySeconds: 10
+            periodSeconds: 10
+          readinessProbe:
+            httpGet:
+              path: /health
+              port: 5000
+            initialDelaySeconds: 5
+            periodSeconds: 10
+          envFrom:
+            - configMapRef:
+                name: vehicle-model-api-cm
+            - secretRef:
+                name: vehicle-model-api-secret

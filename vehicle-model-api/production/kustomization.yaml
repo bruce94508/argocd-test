@@ -1,0 +1,34 @@
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+
+namespace: vehicle-model-api
+
+resources:
+  - ../bases
+
+configMapGenerator:
+  - name: vehicle-model-api-cm
+    behavior: merge
+    envs:
+      - .env
+
+secretGenerator:
+  - name: vehicle-model-api-secret
+    behavior: merge
+    literals:
+      - DB_USER=rac_dvp
+      - DB_PASSWORD=rac1863
+
+images:
+  - name: cicd-so-happy.maxwin.com.tw:5000/vehicle-model-api
+    newTag: 1.0.0
+
+labels:
+  - pairs:
+      app.maxwin/name: vehicle-model-api
+      app.maxwin/component: backend
+    includeSelectors: true
+    includeTemplates: true
+
+patches:
+  - path: patch-deploy.yaml
