@@ -5,6 +5,7 @@ namespace: apts-racev
 
 resources:
   - ../bases
+  - http-vehicle-model-api.yaml
 
 configMapGenerator:
   - name: vehicle-model-api-cm
