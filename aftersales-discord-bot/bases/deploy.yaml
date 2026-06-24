@@ -1,0 +1,21 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: afrersales-discord-bot
+spec:
+  replicas: 1
+  selector: {}
+  template:
+    spec:
+      containers:
+        - name: afrersales-discord-bot
+          image: cicd-so-happy.maxwin.com.tw:5000/afrersales-discord-bot:1.0.0
+          resources:
+            limits:
+              memory: "128Mi"
+              cpu: "128m"
+          envFrom:
+            - configMapRef:
+                name: afrersales-discord-bot-cm
+            - secretRef:
+                name: afrersales-discord-bot-secret
