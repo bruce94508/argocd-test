@@ -46,27 +46,27 @@ secret:
 targets:
   - name: tdx
     # schedule: "30 7 * * *"
-    schedule: "55 11 * * *"
+    schedule: "0 12 * * *"
     timeZone: Asia/Taipei
     concurrencyPolicy: Replace
     extraConfig:
       JOB_TYPE: TDX
   - name: report-all
     # schedule: "0 16 * * *"
-    schedule: "57 11 * * *"
+    schedule: "1 12 * * *"
     timeZone: Asia/Taipei
     concurrencyPolicy: Replace
     extraConfig:
       JOB_TYPE: report
   - name: report-dongnan
-    schedule: "57 11 * * *"
+    schedule: "1 12 * * *"
     timeZone: Asia/Taipei
     concurrencyPolicy: Replace
     extraConfig:
       JOB_TYPE: report
       COMPANY_NAME: "東南客運"
   - name: report-xinxin-taipei
-    schedule: "57 11 * * *"
+    schedule: "1 12 * * *"
     timeZone: Asia/Taipei
     concurrencyPolicy: Replace
     extraConfig:
