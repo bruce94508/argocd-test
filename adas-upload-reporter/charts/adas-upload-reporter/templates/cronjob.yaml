@@ -35,17 +35,22 @@ spec:
               resources:
                 {{- toYaml . | nindent 16 }}
               {{- end }}
-              {{- if $.Values.persistence.enabled }}
               volumeMounts:
+                - name: seeds
+                  mountPath: /app/seeds
+                {{- if $.Values.persistence.enabled }}
                 - name: results-volume
                   mountPath: {{ $.Values.persistence.mountPath | default "/app/results" }}
-              {{- end }}
-          {{- if $.Values.persistence.enabled }}
+                {{- end }}
           volumes:
+            - name: seeds
+              configMap:
+                name: {{ $.Release.Name }}-seeds-cm
+            {{- if $.Values.persistence.enabled }}
             - name: results-volume
               persistentVolumeClaim:
                 claimName: {{ $.Release.Name }}-results-pvc
-          {{- end }}
+            {{- end }}
           restartPolicy: Never
 ---
 {{- end }}

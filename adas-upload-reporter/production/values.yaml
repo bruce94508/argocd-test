@@ -1,7 +1,7 @@
 image:
   repository: cicd-so-happy.maxwin.com.tw:5000/adas-upload-reporter
   pullPolicy: IfNotPresent
-  tag: 1.0.1
+  tag: 1.1.0
 
 resources: {}
 
@@ -21,12 +21,19 @@ config:
   DB_NAME: "RAC_Bus"
   STRAPI_API: "http://10.40.201.251:30080/racev-strapi/api/tbox-tasks"
   OUTPUT_DIR: "/app/results"
+  INPUT_DIR: "/app/seeds"
 
 # 因TDX腳本會先於7:30執行並產出excel檔案，以供report腳本在16:00運行使用，故需掛載 PersistentVolumeClaim來共用檔案，mountPath需和.env設定的OUTPUT_DIR相同
+# persistence:
+#   enabled: true
+#   storageClass: "standard"
+#   accessMode: ReadWriteOnce
+#   size: 500Mi
+#   mountPath: /app/results
 persistence:
   enabled: true
-  storageClass: "standard"
-  accessMode: ReadWriteOnce
+  storageClass: "nfs-rwx"
+  accessMode: ReadWriteMany
   size: 500Mi
   mountPath: /app/results
 
@@ -35,22 +42,33 @@ secret:
   DB_USER: "rac_dvp"
   DB_PASSWORD: "rac1863"
   STRAPI_TOKEN: "f4d672ab33357a6f1032ef0e2c342894663beebb45a1c19208e8ed448548232254f09af02fbb8a3ee0f84425840349842105933d8c8e20893199af169a7108032296ddd9fdfc937a2d434c30b628907323a1a5535d6e8ca4577f47f6308ebc8c2a3b2b62c24c6e08d8e0fc10b325431d9435d68d5ba11e14df803b9262022782"
-  # 生產環境
-  COMPANY_CONFIG_JSON: '{"東南客運":{"method":"EMAIL","email":"bruce.lee@racev.com"},"欣欣客運-台北":{"method":"FTP","host":"10.40.1.105","port":21,"username":"FTPuser1","password":"ftp123456789","remote_path":"/ftp/FTPuser1"}}'
-  # COMPANY_CONFIG_JSON: '{"東南客運":{"method":"EMAIL","email":"selai@southeastbus.com"},"欣欣客運-台北":{"method":"FTP","host":"61.216.177.217","port":21,"username":"RAC","password":"5407","remote_path":"/test"}}'
 
 targets:
   - name: tdx
     # schedule: "30 7 * * *"
-    schedule: "5 13 * * *"
+    schedule: "55 11 * * *"
     timeZone: Asia/Taipei
     concurrencyPolicy: Replace
     extraConfig:
       JOB_TYPE: TDX
-  - name: report
+  - name: report-all
     # schedule: "0 16 * * *"
-    schedule: "8 13 * * *"
+    schedule: "57 11 * * *"
     timeZone: Asia/Taipei
     concurrencyPolicy: Replace
     extraConfig:
       JOB_TYPE: report
+  - name: report-dongnan
+    schedule: "57 11 * * *"
+    timeZone: Asia/Taipei
+    concurrencyPolicy: Replace
+    extraConfig:
+      JOB_TYPE: report
+      COMPANY_NAME: "東南客運"
+  - name: report-xinxin-taipei
+    schedule: "57 11 * * *"
+    timeZone: Asia/Taipei
+    concurrencyPolicy: Replace
+    extraConfig:
+      JOB_TYPE: report
+      COMPANY_NAME: "欣欣客運-台北"

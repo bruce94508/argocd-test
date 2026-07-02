@@ -17,3 +17,18 @@ data:
   {{- end }}
 ---
 {{- end }}
+
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ $.Release.Name }}-seeds-cm
+  namespace: {{ $.Release.Namespace }}
+  labels:
+{{- range $key, $value := $.Values.commonLabels }}
+    {{ $key }}: {{ $value | quote }}
+{{- end }}
+data:
+  company.json: |-
+{{ (.Files.Get "seeds/company.json") | indent 4 }}
+
+---

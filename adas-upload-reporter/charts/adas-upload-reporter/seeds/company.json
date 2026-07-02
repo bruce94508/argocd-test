@@ -1,0 +1,14 @@
+{
+  "東南客運": {
+    "method": "EMAIL",
+    "email": "bruce.lee@racev.com"
+  },
+  "欣欣客運-台北": {
+    "method": "FTP",
+    "host": "10.40.1.105",
+    "port": "21",
+    "username": "FTPuser1",
+    "password": "ftp123456789",
+    "remote_path": "/ftp/FTPuser1"
+  }
+}
