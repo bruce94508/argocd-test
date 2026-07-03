@@ -3,10 +3,11 @@ kind: CronJob
 metadata:
   name: hmi-daily-report
 spec:
-  schedule: "36 15 * * *" # default: UTC, set timeZone for local time
+  schedule: "43 15 * * *" # default: UTC, set timeZone for local time
   startingDeadlineSeconds: 10800 # 3 hours
   jobTemplate:
     spec:
+      backoffLimit: 0
       template:
         spec:
           containers:
