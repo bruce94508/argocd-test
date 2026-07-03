@@ -1,0 +1,32 @@
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+resources:
+  - "../bases"
+
+configMapGenerator:
+  - name: hmi-daily-report-cm
+    behavior: merge
+    envs:
+      - ".env"
+secretGenerator:
+  - name: hmi-daily-report-secret
+    behavior: merge
+    literals:
+      - DB_USER=sa
+      - DB_PASSWORD=YourStrong@Pass123
+
+generatorOptions:
+  disableNameSuffixHash: true
+
+namespace: apts-racev
+
+commonLabels:
+  app.maxwin/name: hmi-daily-report
+  app.maxwin/component: backend
+
+images:
+  - name: cicd-so-happy.maxwin.com.tw:5000/hmi-daily-reporter
+    newTag: 1.0.2
+
+patches:
+  - path: cronjob.yaml

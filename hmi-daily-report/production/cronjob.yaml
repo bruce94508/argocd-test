@@ -1,0 +1,25 @@
+apiVersion: batch/v1
+kind: CronJob
+metadata:
+  name: hmi-daily-report
+spec:
+  schedule: "32 3 * * *" # default: UTC, set timeZone for local time
+  startingDeadlineSeconds: 10800 # 3 hours
+  jobTemplate:
+    spec:
+      template:
+        spec:
+          containers:
+            - name: hmi-daily-report
+              envFrom:
+                - configMapRef:
+                    name: hmi-daily-report-cm
+                - secretRef:
+                    name: hmi-daily-report-secret
+              resources:
+                requests:
+                  cpu: 128m
+                  memory: 256Mi
+                limits:
+                  cpu: 256m
+                  memory: 512Mi
