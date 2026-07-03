@@ -1,7 +1,7 @@
 image:
   repository: cicd-so-happy.maxwin.com.tw:5000/adas-upload-reporter
   pullPolicy: IfNotPresent
-  tag: 1.1.0
+  tag: 1.1.2
 
 resources: {}
 
@@ -46,28 +46,28 @@ secret:
 targets:
   - name: tdx
     # schedule: "30 7 * * *"
-    schedule: "20 13 * * *"
+    schedule: "48 10 * * *"
     timeZone: Asia/Taipei
     concurrencyPolicy: Replace
     extraConfig:
       JOB_TYPE: TDX
   - name: report-all
     # schedule: "0 16 * * *"
-    schedule: "22 13 * * *"
+    schedule: "50 10 * * *"
     timeZone: Asia/Taipei
     concurrencyPolicy: Replace
     extraConfig:
       JOB_TYPE: report
       COMPANY_NAME: "ALL"
   - name: report-dongnan
-    schedule: "22 13 * * *"
+    schedule: "50 10 * * *"
     timeZone: Asia/Taipei
     concurrencyPolicy: Replace
     extraConfig:
       JOB_TYPE: report
       COMPANY_NAME: "東南客運"
   - name: report-xinxin-taipei
-    schedule: "22 13 * * *"
+    schedule: "50 10 * * *"
     timeZone: Asia/Taipei
     concurrencyPolicy: Replace
     extraConfig:
