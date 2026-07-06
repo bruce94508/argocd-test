@@ -7,13 +7,13 @@ resources:
   - ../bases
 
 configMapGenerator:
-  - name: afrersales-discord-bot-cm
+  - name: aftersales-discord-bot-cm
     behavior: merge
     envs:
       - .env
 
 secretGenerator:
-  - name: afrersales-discord-bot-secret
+  - name: aftersales-discord-bot-secret
     behavior: merge
     literals:
       - DB_USER=sa
@@ -22,12 +22,12 @@ secretGenerator:
       - CHANNEL_REPORT=1381476593465294891
 
 images:
-  - name: cicd-so-happy.maxwin.com.tw:5000/afrersales-discord-bot
+  - name: cicd-so-happy.maxwin.com.tw:5000/aftersales-discord-bot
     newTag: 1.1.0
 
 labels:
   - pairs:
-      app.maxwin/name: afrersales-discord-bot
+      app.maxwin/name: aftersales-discord-bot
       app.maxwin/component: backend
     includeSelectors: true
     includeTemplates: true

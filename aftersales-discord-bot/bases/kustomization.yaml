@@ -5,12 +5,12 @@ resources:
   - deploy.yaml
 
 configMapGenerator:
-  - name: afrersales-discord-bot-cm
+  - name: aftersales-discord-bot-cm
     envs:
       - .env.example
 
 secretGenerator:
-  - name: afrersales-discord-bot-secret
+  - name: aftersales-discord-bot-secret
     envs:
       - secret.env.example
 
@@ -19,7 +19,7 @@ generatorOptions:
 
 labels:
   - pairs:
-      app.maxwin/name: afrersales-discord-bot
+      app.maxwin/name: aftersales-discord-bot
       app.maxwin/component: backend
     includeSelectors: true
     includeTemplates: true
