@@ -12,9 +12,18 @@ configMapGenerator:
     envs:
       - .env
 
+secretGenerator:
+  - name: afrersales-discord-bot-secret
+    behavior: merge
+    literals:
+      - DB_USER=sa
+      - DB_PASSWORD=YourStrong@Pass123
+      - BOT_TOKEN=MTUwODM3MDQwNzE0MzY0MTIzOA.GBOCbt.m2Yed_NVxbcGjzo0cmwKEt625QILfUuG8hhvKE
+      - CHANNEL_REPORT=1381476593465294891
+
 images:
   - name: cicd-so-happy.maxwin.com.tw:5000/afrersales-discord-bot
-    newTag: 1.0.0
+    newTag: 1.1.0
 
 labels:
   - pairs:
