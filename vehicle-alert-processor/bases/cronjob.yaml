@@ -1,0 +1,30 @@
+apiVersion: batch/v1
+kind: CronJob
+metadata:
+  name: vehicle-alert-processor
+spec:
+  timeZone: "Asia/Taipei"
+  schedule: "0 * * * *" # default local time schedule
+  concurrencyPolicy: Replace
+  startingDeadlineSeconds: 300 # 5 mins
+  jobTemplate:
+    spec:
+      template:
+        spec:
+          containers:
+            - name: vehicle-alert-processor
+              image: cicd-so-happy.maxwin.com.tw:5000/vehicle-alert-processor:1.0.0
+              imagePullPolicy: IfNotPresent
+              envFrom:
+                - configMapRef:
+                    name: vehicle-alert-processor-cm
+                - secretRef:
+                    name: vehicle-alert-processor-secret
+              resources:
+                requests:
+                  cpu: 128m
+                  memory: 256Mi
+                limits:
+                  cpu: 256m
+                  memory: 512Mi
+          restartPolicy: Never

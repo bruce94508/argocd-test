@@ -1,0 +1,25 @@
+apiVersion: batch/v1
+kind: CronJob
+metadata:
+  name: vehicle-alert-processor
+spec:
+  schedule: "0 * * * *" # every hour
+  startingDeadlineSeconds: 1800 # 30 mins
+  jobTemplate:
+    spec:
+      template:
+        spec:
+          containers:
+            - name: vehicle-alert-processor
+              envFrom:
+                - configMapRef:
+                    name: vehicle-alert-processor-cm
+                - secretRef:
+                    name: vehicle-alert-processor-secret
+              resources:
+                requests:
+                  cpu: 128m
+                  memory: 256Mi
+                limits:
+                  cpu: 256m
+                  memory: 512Mi
