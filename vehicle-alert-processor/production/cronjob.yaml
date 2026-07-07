@@ -17,10 +17,13 @@ spec:
                     name: vehicle-alert-processor-cm
                 - secretRef:
                     name: vehicle-alert-processor-secret
+              env:
+                - name: PYTHONUNBUFFERED
+                  value: "1"
               resources:
                 requests:
-                  cpu: 128m
-                  memory: 256Mi
-                limits:
-                  cpu: 256m
+                  cpu: 500m
                   memory: 512Mi
+                limits:
+                  cpu: 1000m
+                  memory: 2Gi
