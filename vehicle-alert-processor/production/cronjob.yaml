@@ -3,7 +3,8 @@ kind: CronJob
 metadata:
   name: vehicle-alert-processor
 spec:
-  schedule: "0 * * * *" # every hour
+  #schedule: "0 * * * *" # every hour
+  schedule: "*/2 * * * *" # every 2 minutes
   startingDeadlineSeconds: 1800 # 30 mins
   jobTemplate:
     spec:
