@@ -1,0 +1,31 @@
+image:
+  repository: cicd-so-happy.maxwin.com.tw:5000/mongo-vehicle-exporter
+  pullPolicy: IfNotPresent
+  tag: 1.0.2
+  containerPort: 5000
+
+replicaCount: 1
+
+resources:
+  limits:
+    cpu: 1
+    memory: 512Mi
+
+labels:
+  app.maxwin/component: backend
+  app.maxwin/name: mongo-vehicle-exporter
+
+config:
+  MONGO_URI: mongodb://SaturnDB:QisdaBenQ@192.168.186.147/saturn?authMechanism=SCRAM-SHA-1
+  PORT: "5000"
+  TZ: Asia/Taipei
+
+service:
+  type: ClusterIP
+  port: 5000
+
+serviceMonitor:
+  enabled: true
+  scrapeInterval: 60s
+  scrapeTimeout: 10s
+  prometheusRelease: my-prom-stack

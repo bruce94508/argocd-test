@@ -1,0 +1,27 @@
+{{- with .Values.serviceMonitor }}
+{{- if .enabled }}
+apiVersion: monitoring.coreos.com/v1
+kind: ServiceMonitor
+metadata:
+  name: {{ $.Release.Name }}
+  namespace: {{ $.Release.Namespace }}
+  labels:
+    release: {{ .prometheusRelease }}
+spec:
+  selector:
+    matchLabels:
+      {{- with $.Values.labels }}
+      {{- toYaml . | nindent 6 }}
+      {{- end }}
+  namespaceSelector:
+    matchNames:
+    - {{ $.Release.Namespace }}
+  endpoints:
+  - honorLabels: true
+    interval: {{ .scrapeInterval }}
+    path: /metrics
+    port: http-metrics
+    scheme: http
+    scrapeTimeout: {{ .scrapeTimeout }}
+{{- end }}
+{{- end }}

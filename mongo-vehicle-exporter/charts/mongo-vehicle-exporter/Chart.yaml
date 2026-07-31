@@ -1,0 +1,6 @@
+apiVersion: v2
+name: mongo-vehicle-exporter
+description: Helm chart for mongo-vehicle-exporter
+type: application
+version: 0.1.0
+appVersion: 1.0.0

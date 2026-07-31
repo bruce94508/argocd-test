@@ -1,0 +1,28 @@
+image:
+  repository: cicd-so-happy.maxwin.com.tw:5000/mongo-vehicle-exporter
+  pullPolicy: IfNotPresent
+  tag: 1.0.0
+  containerPort: 5000
+
+replicaCount: 1
+
+resources: {}
+
+labels:
+  app.maxwin/component: backend
+  app.maxwin/name: mongo-vehicle-exporter
+
+config:
+  MONGO_URI: mongodb://localhost:27017/saturn
+  PORT: "5000"
+  TZ: UTC
+
+service:
+  type: ClusterIP
+  port: 5000
+
+serviceMonitor:
+  enabled: true
+  scrapeInterval: 30s
+  scrapeTimeout: 10s
+  prometheusRelease: pormetheus-release-name
